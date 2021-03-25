@@ -1,0 +1,39 @@
+﻿@model MiInmobiliaria.Models.TipoPersona
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalle</h1>
+
+<div>
+    <h4>TipoPersona</h4>
+    <hr />
+
+    <div class="row">
+        <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
+
+            <dl class="row">
+                <dt class="col-3 col-sm-3">
+                    @Html.DisplayNameFor(model => model.Id)
+                </dt>
+                <dd class="col-9 col-sm-9 border">
+                    @Html.DisplayFor(model => model.Id)
+                </dd>
+                <dt class="col-3 col-sm-3">
+                    @Html.DisplayNameFor(model => model.Nombre)
+                </dt>
+                <dd class="col-9 col-sm-9 border">
+                    @Html.DisplayFor(model => model.Nombre)
+                </dd>
+            </dl>
+
+        </div>
+    </div>
+
+</div>
+
+<div>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    <a asp-action="Index">Volver a la Lista</a>
+</div>

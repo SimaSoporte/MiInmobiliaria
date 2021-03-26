@@ -14,11 +14,13 @@ namespace MiInmobiliaria.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly RespositorioPropietario repositorio;
+        private readonly RepositorioTipoPersona repositorioTipoPersona;
 
         public PropietarioController(IConfiguration configuration)
         {
             this.configuration = configuration;
             this.repositorio = new RespositorioPropietario(configuration);
+            this.repositorioTipoPersona = new RepositorioTipoPersona(configuration);
         }
         // GET: PropietarioController
         public ActionResult Index()
@@ -37,14 +39,14 @@ namespace MiInmobiliaria.Controllers
         // GET: PropietarioController/Create
         public ActionResult Create()
         {
-            ViewBag.items = new RepositorioTipoPersona(configuration).ListarSelectListItem();
+            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
             return View();
         }
 
         // POST: PropietarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Propietario e)
         {
             try
             {

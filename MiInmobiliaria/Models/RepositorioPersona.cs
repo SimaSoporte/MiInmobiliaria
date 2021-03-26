@@ -39,7 +39,7 @@ namespace MiInmobiliaria.Models
                             Nombre = reader.GetString(2),
                             FechaNac = reader.GetDateTime(3),
                             Dni = reader.GetString(4),
-                            Tipo = new TipoPersona()
+                            TipoPersona = new TipoPersona()
                             {
                                 Id = reader.GetInt32(5),
                                 Nombre = reader.GetString(6)
@@ -85,7 +85,7 @@ namespace MiInmobiliaria.Models
                             Nombre = reader.GetString(2),
                             FechaNac = reader.GetDateTime(3),
                             Dni = reader.GetString(4),
-                            Tipo = new TipoPersona()
+                            TipoPersona = new TipoPersona()
                             {
                                 Id = reader.GetInt32(5),
                                 Nombre = reader.GetString(6)

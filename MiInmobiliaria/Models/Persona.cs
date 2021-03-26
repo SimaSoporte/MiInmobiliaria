@@ -12,7 +12,8 @@ namespace MiInmobiliaria.Models
         public string Nombre { get; set; }
         public DateTime FechaNac { get; set; }
         public string Dni { get; set; }
-        public TipoPersona Tipo { get; set; }
+        public TipoPersona TipoPersona { get; set; }
+        public int TipoPersonaId { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public string Salt { get; set; }

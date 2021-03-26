@@ -19,8 +19,8 @@ namespace MiInmobiliaria.Models
             var res = new List<Propietario>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT [id], [idPersona], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [idTipoPersona], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
+                string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
+                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
                     $"FROM vPropietarios ORDER BY apellido, nombre";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -41,7 +41,7 @@ namespace MiInmobiliaria.Models
                                 Nombre = reader.GetString(4),
                                 FechaNac = reader.GetDateTime(5),
                                 Dni = reader.GetString(6),
-                                Tipo = new TipoPersona()
+                                TipoPersona = new TipoPersona()
                                 {
                                     Id = reader.GetInt32(7),
                                     Nombre = reader.GetString(13)
@@ -68,8 +68,8 @@ namespace MiInmobiliaria.Models
             Propietario propietario = null;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT [id], [idPersona], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [idTipoPersona], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
+                string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
+                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
                     $"FROM vPropietarios ORDER BY apellido, nombre " +
                     $"WHERE id = @id";
                 using(SqlCommand cmd = new SqlCommand(sql, con))
@@ -89,7 +89,7 @@ namespace MiInmobiliaria.Models
                                 Nombre = reader.GetString(4),
                                 FechaNac = reader.GetDateTime(5),
                                 Dni = reader.GetString(6),
-                                Tipo = new TipoPersona()
+                                TipoPersona = new TipoPersona()
                                 {
                                     Id = reader.GetInt32(7),
                                     Nombre = reader.GetString(13)
@@ -121,7 +121,7 @@ namespace MiInmobiliaria.Models
                 using(SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", e.Id);
-                    cmd.Parameters.AddWithValue("@idPersona", e.Persona.Id);
+                    cmd.Parameters.AddWithValue("@PersonaId", e.Persona.Id);
                     cmd.Parameters.AddWithValue("@activo", e.Activo);
                     con.Open();
                     res = Convert.ToInt32(cmd.ExecuteScalar());

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,6 +40,32 @@ namespace MiInmobiliaria.Models
             }
             return res;
         }
+
+
+
+        // TUTORIAL
+        // https://www.youtube.com/watch?v=tiG71g9YnMw
+
+        /// <summary>
+        /// Retorna una List<SelectListItem> para poder llenar un DropDownList
+        /// </summary>
+        /// <returns></returns>
+        public List<SelectListItem> ListarSelectListItem()
+        {
+            List<TipoPersona> lst = Listar();
+
+            List<SelectListItem> items = lst.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.Nombre.ToString(),
+                    Value = d.Id.ToString()
+                };
+            });
+
+            return items;
+        }
+
         public TipoPersona Obtener(int id)
         {
             TipoPersona tipoPersona = null;

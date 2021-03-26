@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
+using MiInmobiliaria.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,21 +12,32 @@ namespace MiInmobiliaria.Controllers
 {
     public class PropietarioController : Controller
     {
+        private readonly IConfiguration configuration;
+        private readonly RespositorioPropietario repositorio;
+
+        public PropietarioController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+            this.repositorio = new RespositorioPropietario(configuration);
+        }
         // GET: PropietarioController
         public ActionResult Index()
         {
-            return View();
+            var lista = repositorio.Listar();
+            return View(lista);
         }
 
         // GET: PropietarioController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var propietario = repositorio.Obtener(id);
+            return View(propietario);
         }
 
         // GET: PropietarioController/Create
         public ActionResult Create()
         {
+            ViewBag.items = new RepositorioTipoPersona(configuration).ListarSelectListItem();
             return View();
         }
 

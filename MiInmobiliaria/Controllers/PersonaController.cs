@@ -9,43 +9,39 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Controllers
 {
-    public class TipoPersonaController : Controller
+    public class PersonaController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly TipoPersonaData repositorio;
+        private readonly PersonaData repositorio;
 
-        public TipoPersonaController(IConfiguration configuration)
+        public PersonaController(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.repositorio = new TipoPersonaData(configuration);
+            this.repositorio = new PersonaData(configuration);
         }
-        // GET: TipoPersonaController
+
+        // GET: PersonaController
         public ActionResult Index()
         {
-            var lista = repositorio.Listar();
-            ViewData[nameof(TipoPersona)] = lista;
-            ViewData["Title"] = nameof(TipoPersona);
-            return View(lista);
+            return View();
         }
 
-        // GET: TipoPersonaController/Details/5
+        // GET: PersonaController/Details/5
         public ActionResult Details(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            //ViewData[nameof(TipoPersona)] = tipoPersona;
-            return View(tipoPersona);
+            return View();
         }
 
-        // GET: TipoPersonaController/Create
+        // GET: PersonaController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: TipoPersonaController/Create
+        // POST: PersonaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Persona e)
         {
             try
             {
@@ -57,21 +53,19 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
-        // GET: TipoPersonaController/Edit/5
+        // GET: PersonaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            return View(tipoPersona);
+            return View();
         }
 
-        // POST: TipoPersonaController/Edit/5
+        // POST: PersonaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, TipoPersona e)
+        public ActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
-                repositorio.Editar(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -80,21 +74,19 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
-        // GET: TipoPersonaController/Delete/5
+        // GET: PersonaController/Delete/5
         public ActionResult Delete(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            return View(tipoPersona);
+            return View();
         }
 
-        // POST: TipoPersonaController/Delete/5
+        // POST: PersonaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, TipoPersona e)
+        public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                repositorio.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

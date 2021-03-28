@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class RepositorioTipoPersona : RepositorioBase
+    public class TipoPersonaData : RepositorioBase
     {
-        public RepositorioTipoPersona(IConfiguration configuration) : base(configuration)
+        public TipoPersonaData(IConfiguration configuration) : base(configuration)
         {
         }
 
@@ -135,7 +135,7 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
-        public int Borrar(int id)
+        public int Delete(int id)
         {
             int res = -1;
             using(SqlConnection con = new SqlConnection(connectionString))

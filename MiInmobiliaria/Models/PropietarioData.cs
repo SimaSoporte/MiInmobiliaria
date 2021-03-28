@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class RespositorioPropietario : RepositorioBase
+    public class PropietarioData : RepositorioBase
     {
-        public RespositorioPropietario(IConfiguration configuration) : base(configuration)
+        public PropietarioData(IConfiguration configuration) : base(configuration)
         {
 
         }
@@ -20,7 +20,7 @@ namespace MiInmobiliaria.Models
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
+                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [TipoPersonaNombre] " +
                     $"FROM vPropietarios ORDER BY apellido, nombre";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -69,9 +69,10 @@ namespace MiInmobiliaria.Models
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
-                    $"FROM vPropietarios ORDER BY apellido, nombre " +
-                    $"WHERE id = @id";
+                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [TipoPersonaNombre] " +
+                    $"FROM vPropietarios " +
+                    $"WHERE id = {@id} " +
+                    $"ORDER BY apellido, nombre ";
                 using(SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -102,8 +103,8 @@ namespace MiInmobiliaria.Models
                             },
                             Activo = reader.GetBoolean(2)
                         };
-                        con.Close();
                     }
+                    con.Close();
                 }
             }
             return propietario;
@@ -114,10 +115,10 @@ namespace MiInmobiliaria.Models
             int res = -1;
             using(SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"INSERT INTO {nameof(Propietario)} ( {nameof(Propietario.Id)}, " +
-                    $"{nameof(Propietario.Persona)}, {nameof(Propietario.Activo)} ) " +
-                    $"VALUES ( @id, @id_persona, @activo); " +
-                    $"SELECT SPOCE_IDENTITY()";
+                string sql = $"INSERT INTO {nameof(Propietario)} ( " +
+                    $"PersonaId, {nameof(Propietario.Activo)} ) " +
+                    $"VALUES ( @PersonaId, @activo); " +
+                    $"SELECT SCOPE_IDENTITY()";
                 using(SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", e.Id);
@@ -125,6 +126,42 @@ namespace MiInmobiliaria.Models
                     cmd.Parameters.AddWithValue("@activo", e.Activo);
                     con.Open();
                     res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
+        public int Editar(Propietario e)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"UPDATE {nameof(Propietario)} SET {nameof(Propietario.Activo)} = @activo " +
+                    $"WHERE {nameof(Propietario.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@activo", e.Activo);
+                    cmd.Parameters.AddWithValue("@id", e.Id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
+        public int Delete(int id)
+        {
+            int res = -1;
+            using(SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"DELETE FROM {nameof(Propietario)} WHERE {nameof(Propietario.Id)} = @id";
+                using(SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
                     con.Close();
                 }
             }

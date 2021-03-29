@@ -12,13 +12,14 @@ namespace MiInmobiliaria.Controllers
     public class TipoPersonaController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly TipoPersonaData repositorio;
+        private readonly RepositorioTipoPersona repositorio;
 
         public TipoPersonaController(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.repositorio = new TipoPersonaData(configuration);
+            this.repositorio = new RepositorioTipoPersona(configuration);
         }
+
         // GET: TipoPersonaController
         public ActionResult Index()
         {
@@ -31,9 +32,9 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Details/5
         public ActionResult Details(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            //ViewData[nameof(TipoPersona)] = tipoPersona;
-            return View(tipoPersona);
+            var e = repositorio.Obtener(id);
+            //ViewData[nameof(TipoPersona)] = e;
+            return View(e);
         }
 
         // GET: TipoPersonaController/Create
@@ -45,10 +46,11 @@ namespace MiInmobiliaria.Controllers
         // POST: TipoPersonaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(TipoPersona e)
         {
             try
             {
+                repositorio.Create(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -60,8 +62,8 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            return View(tipoPersona);
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
         // POST: TipoPersonaController/Edit/5
@@ -83,8 +85,8 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Delete/5
         public ActionResult Delete(int id)
         {
-            var tipoPersona = repositorio.Obtener(id);
-            return View(tipoPersona);
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
         // POST: TipoPersonaController/Delete/5

@@ -1,4 +1,4 @@
-﻿@model MiInmobiliaria.Models.TipoPersona
+﻿@model MiInmobiliaria.Models.EstadoInmueble
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 <div class="row align-items-baseline">
     <div class="col-3"> <h1>Crear</h1> </div>
-    <div class="col-9"> <h4>TipoPersona</h4> </div>
+    <div class="col-9"> <h4>EstadoInmueble</h4> </div>
 </div>
 
 <hr />
@@ -14,15 +14,15 @@
     <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
-                    <div class="col-9">
-                        <input asp-for="Id" class="form-control" readonly />
-                        <span asp-validation-for="Id" class="text-danger"></span>
+            @*<div class="form-group">
+                    <div class="row">
+                        <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
+                        <div class="col-9">
+                            <input asp-for="Id" class="form-control" readonly />
+                            <span asp-validation-for="Id" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>*@
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label asp-for="Nombre" class="control-label"></label></div>

@@ -27,7 +27,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <i class="fas fa-home"></i> MiInmobiliaria</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MiInmobiliaria</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -35,24 +35,31 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a>
                         </li>
-                        <li class="nav-item">
+                        @*<li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>*@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Agencia" asp-action="index">Agencias</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="index">Propietarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="index">Inquilinos</a>
                         </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Configuracion</a>
                             <div class="dropdown-menu">
                                 <a class="nav-link" asp-area="" asp-controller="TipoPersona" asp-action="index"> <i class="fas fa-user-cog"></i> TipoPersona</a>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Separated link</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">TipoInmueble</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="UsoInmueble" asp-action="index">UsoInmueble</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="EstadoInmueble" asp-action="index">EstadoInmueble</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </div>
                         </li>
 

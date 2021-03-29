@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class PersonaData : RepositorioBase
+    public class RepositorioPersona : RepositorioBase
     {
-        public PersonaData(IConfiguration configuration) : base(configuration)
+        public RepositorioPersona(IConfiguration configuration) : base(configuration)
         {
         }
 

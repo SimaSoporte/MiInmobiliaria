@@ -9,42 +9,48 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Controllers
 {
-    public class PersonaController : Controller
+    public class TipoInmuebleController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly RepositorioPersona repositorio;
+        private readonly RepositorioTipoInmueble repositorio;
 
-        public PersonaController(IConfiguration configuration)
+        public TipoInmuebleController(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.repositorio = new RepositorioPersona(configuration);
+            this.repositorio = new RepositorioTipoInmueble(configuration);
         }
 
-        // GET: PersonaController
+        // GET: TipoInmuebleController
         public ActionResult Index()
         {
-            return View();
+            var lista = repositorio.Listar();
+            ViewData[nameof(TipoInmueble)] = lista;
+            ViewData["Title"] = nameof(TipoInmueble);
+            return View(lista);
         }
 
-        // GET: PersonaController/Details/5
+        // GET: TipoInmuebleController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var e = repositorio.Obtener(id);
+            //ViewData[nameof(TipoInmueble)] = e;
+            return View(e);
         }
 
-        // GET: PersonaController/Create
+        // GET: TipoInmuebleController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: PersonaController/Create
+        // POST: TipoInmuebleController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Persona e)
+        public ActionResult Create(TipoInmueble e)
         {
             try
             {
+                repositorio.Create(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -53,19 +59,21 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
-        // GET: PersonaController/Edit/5
+        // GET: TipoInmuebleController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
-        // POST: PersonaController/Edit/5
+        // POST: TipoInmuebleController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, TipoInmueble e)
         {
             try
             {
+                repositorio.Editar(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -74,19 +82,21 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
-        // GET: PersonaController/Delete/5
+        // GET: TipoInmuebleController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
-        // POST: PersonaController/Delete/5
+        // POST: TipoInmuebleController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, TipoInmueble e)
         {
             try
             {
+                repositorio.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

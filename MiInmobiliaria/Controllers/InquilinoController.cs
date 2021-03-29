@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
 using System;
@@ -10,17 +9,17 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Controllers
 {
-    public class PropietarioController : Controller
+    public class InquilinoController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly RepositorioPropietario repositorio;
+        private readonly RepositorioInquilino repositorio;
         private readonly RepositorioTipoPersona repositorioTipoPersona;
         private readonly RepositorioPersona repositorioPersona;
 
-        public PropietarioController(IConfiguration configuration)
+        public InquilinoController(IConfiguration configuration)
         {
             this.configuration = configuration;
-            this.repositorio = new RepositorioPropietario(configuration);
+            this.repositorio = new RepositorioInquilino(configuration);
             this.repositorioTipoPersona = new RepositorioTipoPersona(configuration);
             this.repositorioPersona = new RepositorioPersona(configuration);
         }
@@ -49,10 +48,10 @@ namespace MiInmobiliaria.Controllers
         // POST: PropietarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Propietario e)
+        public ActionResult Create(Inquilino e)
         {
             Persona p = repositorioPersona.Obtener(e.Persona.Dni, e.Persona.Email);
-            if ( p != null )
+            if (p != null)
                 e.Persona = p;
             else
             {
@@ -85,7 +84,7 @@ namespace MiInmobiliaria.Controllers
         // POST: PropietarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, Propietario e)
+        public ActionResult Edit(int id, Inquilino e)
         {
             try
             {
@@ -110,7 +109,7 @@ namespace MiInmobiliaria.Controllers
         // POST: PropietarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, Propietario e)
+        public ActionResult Delete(int id, Inquilino e)
         {
             try
             {
@@ -122,5 +121,6 @@ namespace MiInmobiliaria.Controllers
                 return View();
             }
         }
+
     }
 }

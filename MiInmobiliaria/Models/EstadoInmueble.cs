@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class Propietario
+    public class EstadoInmueble
     {
         [Key]
         public int Id { get; set; }
-        public Persona Persona { get; set; }
-        public bool Activo { get; set; }
+        public string Nombre { get; set; }
     }
 }

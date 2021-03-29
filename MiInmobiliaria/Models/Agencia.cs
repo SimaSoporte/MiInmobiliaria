@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class Propietario
+    public class Agencia
     {
         [Key]
         public int Id { get; set; }

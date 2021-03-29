@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class PropietarioData : RepositorioBase
+    public class RepositorioPropietario : RepositorioBase
     {
-        public PropietarioData(IConfiguration configuration) : base(configuration)
+        public RepositorioPropietario(IConfiguration configuration) : base(configuration)
         {
-
         }
 
         public List<Propietario> Listar()

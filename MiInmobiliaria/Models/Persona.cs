@@ -8,6 +8,9 @@ namespace MiInmobiliaria.Models
 {
     public class Persona
     {
+        // TUTORIAL
+        // https://www.youtube.com/watch?v=3mu2K5vXcxc
+
         [Key]
         public int Id { get; set; }
         public string Apellido { get; set; }

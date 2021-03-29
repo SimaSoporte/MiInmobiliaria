@@ -2,32 +2,32 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class TipoPersonaData : RepositorioBase
+    public class RepositorioTipoInmueble : RepositorioBase
     {
-        public TipoPersonaData(IConfiguration configuration) : base(configuration)
+        public RepositorioTipoInmueble(IConfiguration configuration) : base(configuration)
         {
         }
 
-        public List<TipoPersona> Listar() {
-            var res = new List<TipoPersona>();
+        public List<TipoInmueble> Listar()
+        {
+            var res = new List<TipoInmueble>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT {nameof(TipoPersona.Id)}, {nameof(TipoPersona.Nombre)} FROM {nameof(TipoPersona)}";
+                string sql = $"SELECT {nameof(TipoInmueble.Id)}, {nameof(TipoInmueble.Nombre)} FROM {nameof(TipoInmueble)}";
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     con.Open();
                     var reader = cmd.ExecuteReader();
 
-                    while(reader.Read())
+                    while (reader.Read())
                     {
-                        var t = new TipoPersona
+                        var t = new TipoInmueble
                         {
                             Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1)
@@ -52,7 +52,7 @@ namespace MiInmobiliaria.Models
         /// <returns></returns>
         public List<SelectListItem> ListarSelectListItem()
         {
-            List<TipoPersona> lst = Listar();
+            List<TipoInmueble> lst = Listar();
 
             List<SelectListItem> items = lst.ConvertAll(d =>
             {
@@ -66,16 +66,16 @@ namespace MiInmobiliaria.Models
             return items;
         }
 
-        public TipoPersona Obtener(int id)
+        public TipoInmueble Obtener(int id)
         {
-            TipoPersona tipoPersona = null;
+            TipoInmueble tipoInmueble = null;
 
-            using(SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT {nameof(tipoPersona.Id)}, {nameof(TipoPersona.Nombre)} " +
-                    $"FROM {nameof(TipoPersona)} " +
+                string sql = $"SELECT {nameof(TipoInmueble.Id)}, {nameof(TipoInmueble.Nombre)} " +
+                    $"FROM {nameof(TipoInmueble)} " +
                     $"WHERE id={@id}";
-                using(SqlCommand cmd = new SqlCommand(sql, con))
+                using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
@@ -83,7 +83,7 @@ namespace MiInmobiliaria.Models
 
                     while (reader.Read())
                     {
-                        tipoPersona = new TipoPersona
+                        tipoInmueble = new TipoInmueble
                         {
                             Id = reader.GetInt32(0),
                             Nombre = reader.GetString(1)
@@ -94,15 +94,15 @@ namespace MiInmobiliaria.Models
                 }
             }
 
-            return tipoPersona;
+            return tipoInmueble;
         }
 
-        public int Create(TipoPersona e)
+        public int Create(TipoInmueble e)
         {
             int res = -1;
-            using(SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"INSERT INTO {nameof(TipoPersona)} ({nameof(TipoPersona.Nombre)}) " +
+                string sql = $"INSERT INTO {nameof(TipoInmueble)} ({nameof(TipoInmueble.Nombre)}) " +
                     $"VALUES (@nombre);" +
                     $"SELECT SCOPE_IDENTITY();";
                 using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -116,14 +116,14 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
-        public int Editar(TipoPersona e)
+        public int Editar(TipoInmueble e)
         {
             int res = -1;
-            using(SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"UPDATE {nameof(TipoPersona)} SET {nameof(TipoPersona.Nombre)} = @nombre " +
-                    $"WHERE {nameof(TipoPersona.Id)} = @id";
-                using(SqlCommand cmd = new SqlCommand(sql, con))
+                string sql = $"UPDATE {nameof(TipoInmueble)} SET {nameof(TipoInmueble.Nombre)} = @nombre " +
+                    $"WHERE {nameof(TipoInmueble.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@nombre", e.Nombre);
                     cmd.Parameters.AddWithValue("@id", e.Id);
@@ -138,10 +138,10 @@ namespace MiInmobiliaria.Models
         public int Delete(int id)
         {
             int res = -1;
-            using(SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"DELETE FROM {nameof(TipoPersona)} WHERE {nameof(TipoPersona.Id)} = @id";
-                using(SqlCommand cmd = new SqlCommand(sql, con))
+                string sql = $"DELETE FROM {nameof(TipoInmueble)} WHERE {nameof(TipoInmueble.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
                     con.Open();
@@ -152,5 +152,6 @@ namespace MiInmobiliaria.Models
 
             return res;
         }
+
     }
 }

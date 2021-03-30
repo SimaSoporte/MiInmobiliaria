@@ -13,6 +13,26 @@ namespace MiInmobiliaria.Models
         {
         }
 
+        //ALTER TABLE Persona
+        //ADD CONSTRAINT fk_PersonaTipoPersonaId FOREIGN KEY(TipoPersonaId) REFERENCES TipoPersona(Id);
+
+        //ALTER TABLE Agencia
+        //ADD CONSTRAINT fk_AgenciaPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+
+        //ALTER TABLE Propietario
+        //ADD CONSTRAINT fk_PropietarioPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+
+        //ALTER TABLE Inquilino
+        //ADD CONSTRAINT fk_InquilinoPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+
+        //ALTER TABLE Garante
+        //ADD CONSTRAINT fk_GarantePersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+
+        //exec sp_fkeys 'TipoPersona';
+
+        //ALTER TABLE Persona DROP CONSTRAINT fk_TipoPersonaId;
+
+
         public List<Persona> Listar()
         {
             var res = new List<Persona>();
@@ -209,6 +229,24 @@ namespace MiInmobiliaria.Models
                     con.Close();
                 }
             }
+            return res;
+        }
+
+        public int Delete(int id)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"DELETE FROM {nameof(Persona)} WHERE {nameof(Persona.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+
             return res;
         }
     }

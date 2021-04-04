@@ -38,10 +38,10 @@ namespace MiInmobiliaria.Models
             var res = new List<Persona>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT P.[id], [apellido], [nombre], [fechaNac], [dni], [idTipoPersona], T.[nombre] AS nombreTipoPersona, " +
-                    $"[email], [password], [salt], [foto], [formato] " +
+                string sql = $"SELECT P.[id], P.[apellido], P.[nombre], P.[fechaNac], P.[dni], P.[TipoPersonaId], T.[nombre] AS TipoPersonaNombre, " +
+                    $"P.[email], P.[password], P.[salt], P.[foto], P.[formato] " +
                     $"FROM {nameof(Persona)} P " +
-                    $"  INNER JOIN TipoPersona T ON P.idTipoPersona = T.id" +
+                    $"  INNER JOIN TipoPersona T ON P.TipoPersonaId = T.id " +
                     $"ORDER BY {nameof(Persona.Apellido)}, {nameof(Persona.Nombre)}";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -83,10 +83,10 @@ namespace MiInmobiliaria.Models
             Persona persona = null;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT P.[id], [apellido], [nombre], [fechaNac], [dni], [idTipoPersona], T.[nombre] AS nombreTipoPersona, " +
+                string sql = $"SELECT P.[id], [apellido], P.[nombre], [fechaNac], [dni], [TipoPersonaId], T.[nombre] AS TipoPersonaNombre, " +
                     $"[email], [password], [salt], [foto], [formato] " +
                     $"FROM {nameof(Persona)} P " +
-                    $"  INNER JOIN TipoPersona T ON P.idTipoPersona = T.id " +
+                    $"  INNER JOIN TipoPersona T ON P.TipoPersonaID = T.id " +
                     $"WHERE P.{nameof(Persona.Id)} = @id " +
                     $"ORDER BY {nameof(Persona.Apellido)}, {nameof(Persona.Nombre)}";
 

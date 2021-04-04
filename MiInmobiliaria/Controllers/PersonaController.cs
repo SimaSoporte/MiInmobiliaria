@@ -13,28 +13,36 @@ namespace MiInmobiliaria.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly RepositorioPersona repositorio;
+        private readonly RepositorioTipoPersona repositorioTipoPersona;
 
         public PersonaController(IConfiguration configuration)
         {
             this.configuration = configuration;
             this.repositorio = new RepositorioPersona(configuration);
+            this.repositorioTipoPersona = new RepositorioTipoPersona(configuration);
         }
 
         // GET: PersonaController
         public ActionResult Index()
         {
-            return View();
+            var lista = repositorio.Listar();
+            ViewData[nameof(Persona)] = lista;
+            ViewData["Title"] = nameof(Persona);
+            ViewData["Error"] = TempData["Error"];
+            return View(lista);
         }
 
         // GET: PersonaController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
         // GET: PersonaController/Create
         public ActionResult Create()
         {
+            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
             return View();
         }
 
@@ -56,16 +64,19 @@ namespace MiInmobiliaria.Controllers
         // GET: PersonaController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
         // POST: PersonaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Persona e)
         {
             try
             {
+                repositorio.Editar(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -77,16 +88,18 @@ namespace MiInmobiliaria.Controllers
         // GET: PersonaController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var e = repositorio.Obtener(id);
+            return View(e);
         }
 
         // POST: PersonaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Persona e)
         {
             try
             {
+                repositorio.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
             catch

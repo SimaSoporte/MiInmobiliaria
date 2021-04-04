@@ -77,7 +77,7 @@ namespace MiInmobiliaria.Controllers
         {
             ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
             var e = repositorio.Obtener(id);
-            e.Id = id;
+            //e.Id = id;
             return View(e);
         }
 

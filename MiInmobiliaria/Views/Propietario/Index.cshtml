@@ -39,9 +39,12 @@
                 <td> @Html.DisplayFor(modelItem => item.Persona.TipoPersona.Nombre) </td>
                 <td> @Html.DisplayFor(modelItem => item.Activo) </td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Detalle", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Borrar", "Delete", new { id=item.Id })
+                    @*@Html.ActionLink("Editar", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Detalle", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Borrar", "Delete", new { id = item.Id })*@
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a>
                 </td>
             </tr>
             }

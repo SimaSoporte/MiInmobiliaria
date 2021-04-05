@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -116,9 +117,15 @@ namespace MiInmobiliaria.Controllers
                 repositorio.Delete(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (SqlException ex)
             {
-                return View();
+                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el tipo Persona porque esta utilizado" : "Ocurrio un error.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
             }
         }
     }

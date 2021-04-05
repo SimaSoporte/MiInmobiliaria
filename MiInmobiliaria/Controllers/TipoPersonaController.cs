@@ -108,7 +108,7 @@ namespace MiInmobiliaria.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Ocurrio un error.";
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
                 return RedirectToAction(nameof(Index));
             }
         }

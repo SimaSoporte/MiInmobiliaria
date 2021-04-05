@@ -65,7 +65,8 @@ namespace MiInmobiliaria.Controllers
         // GET: PersonaController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
+            //ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
+            ViewBag.tipoPersona = repositorioTipoPersona.Listar();
             var e = repositorio.Obtener(id);
             return View(e);
         }

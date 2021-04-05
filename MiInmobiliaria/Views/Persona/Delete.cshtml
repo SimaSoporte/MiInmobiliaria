@@ -21,6 +21,14 @@
             <dd class="col-9 col-sm-9 border form-control">
                 @Html.DisplayFor(model => model.Id)
             </dd>
+
+            <dt class="col-3 col-sm-3">
+                @Html.DisplayNameFor(model => model.TipoPersona)
+            </dt>
+            <dd class="col-9 col-sm-9 border form-control">
+                @Html.DisplayFor(model => model.TipoPersona.Nombre)
+            </dd>
+
             <dt class="col-3 col-sm-3">
                 @Html.DisplayNameFor(model => model.Apellido)
             </dt>

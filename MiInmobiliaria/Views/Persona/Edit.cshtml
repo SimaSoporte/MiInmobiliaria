@@ -2,7 +2,8 @@
 
 @{
     ViewData["Title"] = "Edit";
-    List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+    //List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+    List<TipoPersona> tipoPersona = (List<TipoPersona>)ViewBag.tipoPersona;
 }
 
 <div class="row align-items-baseline">
@@ -24,14 +25,30 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
                     <div class="col-9">
                         @Html.DropDownList("Persona.TipoPersona.Id", items, new { @class = "form-control" })
                     </div>
                 </div>
+            </div>*@
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-3"><label>Tipo Persona</label></div>
+                    <div class="col-9">
+                        <select class="form-control" name="TipoPersonaId">
+                            @foreach (var tp in (List<TipoPersona>)ViewBag.tipoPersona)
+                            {
+                                @:<option @(tp.Id == Model.TipoPersona.Id ? "selected" : "") value="@tp.Id">@(tp.Nombre)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TipoPersona" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
+
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label asp-for="Apellido" class="control-label"></label></div>

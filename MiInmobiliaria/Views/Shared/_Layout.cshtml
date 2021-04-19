@@ -8,8 +8,8 @@
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
               crossorigin="anonymous"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only"
@@ -18,7 +18,7 @@
               asp-suppress-fallback-integrity="true" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
-    
+
     <link href="~/lib/font-awesome/css/all.css" rel="stylesheet" />
 
 </head>
@@ -32,44 +32,71 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a>
-                        </li>
-                        @*<li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </li>*@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Agencia" asp-action="index">Agencias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="index">Propietarios</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="index">Inquilinos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="index">Inmuebles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Alquiler" asp-action="index">Alquileres</a>
-                        </li>
+                    <ul class="navbar-nav flex-grow-1 justify-content-between">
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Configuracion</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoPersona" asp-action="index">TipoPersona</a>
-                                <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="index"> <i class="fas fa-user-cog"></i> Persona</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">TipoInmueble</a>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="UsoInmueble" asp-action="index">UsoInmueble</a>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="EstadoInmueble" asp-action="index">EstadoInmueble</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </div>
-                        </li>
+                        @if (!User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a>
+                            </li>
+                            <li class="nav-item float-right">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                            </li>
+                        }
+                        else
+                        {
+                            @if (User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="index">Propietarios</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="index">Inmuebles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="index">Inquilinos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Contrato" asp-action="index">Alquileres</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Pago" asp-action="index">Pagos</a>
+                                </li>
+
+                                @if (User.IsInRole("SuperAdministrador"))
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Configuracion</a>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoPersona" asp-action="index">TipoPersona</a>
+                                            <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="index"> <i class="fas fa-user-cog"></i> Personas</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="nav-link" asp-area="" asp-controller="Usuario" asp-action="index"> <i class="fas fa-user-cog"></i> Usuarios</a>
+                                            <a class="nav-link" asp-area="" asp-controller="Agencia" asp-action="index"> <i class="fas fa-user-cog"></i> Agencias</a>
+                                            <a class="nav-link" asp-area="" asp-controller="Garante" asp-action="index"> <i class="fas fa-user-cog"></i> Garantes</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">TipoInmueble</a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="UsoInmueble" asp-action="index">UsoInmueble</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                        </div>
+                                    </li>
+                                }
+                            }
+                            <li class="nav-item dropdown">
+                                <a class="btn btn-secondary dropdown-toggle text-light" href="#" role="button" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent" data-display="static">
+                                    <span class="lnr lnr-user"></span> @User.Identity.Name
+                                </a>
+
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <a class="dropdown-item text-dark" asp-controller="Usuario" asp-action="Perfil"> <i class="fas fa-id-card"></i> Perfil</a>
+                                    <a class="dropdown-item text-dark" asp-controller="Usuario" asp-action="Logout"> <i class="fas fa-sign-out-alt"></i> Salir</a>
+                                </div>
+                            </li>
+                        }
 
                     </ul>
+
                 </div>
             </div>
         </nav>

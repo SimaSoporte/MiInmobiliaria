@@ -15,23 +15,39 @@
     <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
-                    <div class="col-9">
-                        <input asp-for="Id" class="form-control" readonly />
-                        <span asp-validation-for="Id" class="text-danger"></span>
-                    </div>
+            @*<div class="form-group">
+            <div class="row">
+                <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
+                <div class="col-9">
+                    <input asp-for="Id" class="form-control" readonly />
+                    <span asp-validation-for="Id" class="text-danger"></span>
                 </div>
             </div>
-            <div class="form-group">
+        </div>*@
+            @*<div class="form-group">
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
                     <div class="col-9">
-                        @Html.DropDownList("Persona.TipoPersona.Id", items, new { @class = "form-control" })
+                        @Html.DropDownList("Persona.TipoPersonaId", items, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>*@
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-3"><label class="control-label">Uso Inmueble</label></div>
+                    <div class="col-9">
+                        <select class="form-control" name="TipoPersonaId">
+                            @foreach (var item in (IList<TipoPersona>)ViewBag.TiposPersona)
+                            {
+                                @:<option value="@item.Id">@(item.Nombre)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="TipoPersonaId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label asp-for="Apellido" class="control-label"></label></div>
@@ -70,6 +86,15 @@
             </div>
             <div class="form-group">
                 <div class="row">
+                    <div class="col-3"><label asp-for="Telefono" class="control-label"></label></div>
+                    <div class="col-9">
+                        <input asp-for="Telefono" class="form-control" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
                     <div class="col-3"><label asp-for="Email" class="control-label"></label></div>
                     <div class="col-9">
                         <input asp-for="Email" class="form-control" />
@@ -77,22 +102,23 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+
+            <div class="form-group" hidden>
                 <div class="row">
-                    <div class="col-3"><label asp-for="Password" class="control-label"></label></div>
+                    <div class="col-3"><label asp-for="Avatar" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Password" class="form-control" type="password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <input asp-for="Avatar" class="form-control" />
+                        <span asp-validation-for="Avatar" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
                 <div class="row">
-                    <div class="col-3"><label asp-for="Foto" class="control-label"></label></div>
+                    <div class="col-3"><label asp-for="AvatarFile" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Foto" class="form-control" />
-                        <span asp-validation-for="Foto" class="text-danger"></span>
+                        <input type="file" asp-for="AvatarFile" name="AvatarFile" class="form-control" />
+                        <span asp-validation-for="AvatarFile" class="text-danger"></span>
                     </div>
                 </div>
             </div>

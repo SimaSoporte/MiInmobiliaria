@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
@@ -13,20 +14,24 @@ namespace MiInmobiliaria.Controllers
     public class PersonaController : Controller
     {
         private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment environment;
         private readonly RepositorioPersona repositorio;
         private readonly RepositorioTipoPersona repositorioTipoPersona;
+        private readonly Utils utils;
 
-        public PersonaController(IConfiguration configuration)
+        public PersonaController(IConfiguration configuration, IWebHostEnvironment environment)
         {
             this.configuration = configuration;
+            this.environment = environment;
             this.repositorio = new RepositorioPersona(configuration);
             this.repositorioTipoPersona = new RepositorioTipoPersona(configuration);
+            this.utils = new Utils(configuration, environment);
         }
 
         // GET: PersonaController
         public ActionResult Index()
         {
-            var lista = repositorio.Listar();
+            var lista = repositorio.getAll();
             ViewData[nameof(Persona)] = lista;
             ViewData["Title"] = nameof(Persona);
             ViewData["Error"] = TempData["Error"];
@@ -36,14 +41,17 @@ namespace MiInmobiliaria.Controllers
         // GET: PersonaController/Details/5
         public ActionResult Details(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
+
+
 
         // GET: PersonaController/Create
         public ActionResult Create()
         {
             ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
+            ViewBag.TiposPersona = repositorioTipoPersona.Listar();
             return View();
         }
 
@@ -54,20 +62,38 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
+                Persona p = repositorio.getByDniEmail(e.Dni, e.Email);
+                if (p != null)
+                    e = p;
+                else
+                {
+                    e.Password = "";
+                    e.Avatar = "";
+                    e.Id = repositorio.Create(e);
+                    if (e.AvatarFile != null)
+                    {
+                        e.Avatar = utils.uploadFile(e);
+                        repositorio.Edit(e);
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
                 return View();
             }
+
         }
+
+
 
         // GET: PersonaController/Edit/5
         public ActionResult Edit(int id)
         {
             //ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
-            ViewBag.tipoPersona = repositorioTipoPersona.Listar();
-            var e = repositorio.Obtener(id);
+            ViewBag.TiposPersona = repositorioTipoPersona.Listar();
+            var e = repositorio.getById(id);
             return View(e);
         }
 
@@ -78,11 +104,18 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                repositorio.Editar(e);
+                e.Password = repositorio.getById(e.Id).Password;
+                e.Avatar = "";
+                if (e.AvatarFile != null)
+                {
+                    e.Avatar = utils.uploadFile(e);
+                }
+                repositorio.Edit(e);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
                 return View();
             }
         }
@@ -90,7 +123,7 @@ namespace MiInmobiliaria.Controllers
         // GET: PersonaController/Delete/5
         public ActionResult Delete(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
 

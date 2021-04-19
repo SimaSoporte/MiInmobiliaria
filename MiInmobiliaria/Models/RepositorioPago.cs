@@ -1,0 +1,158 @@
+﻿using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MiInmobiliaria.Models
+{
+    public class RepositorioPago : RepositorioBase, IRepositorioPago
+    {
+        public RepositorioPago(IConfiguration configuration) : base(configuration)
+        {
+        }
+        public int Create(Pago e)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"INSERT INTO pago (numero, fecha, importe, ContratoId) " +
+                    $"VALUES (@numero, @fecha, @importe, @ContratoId); " +
+                    $"SELECT SCOPE_IDENTITY()";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@numero", e.Numero);
+                    cmd.Parameters.AddWithValue("@fecha", e.Fecha);
+                    cmd.Parameters.AddWithValue("@importe", e.Importe);
+                    cmd.Parameters.AddWithValue("@ContratoId", e.ContratoId);
+                    con.Open();
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
+        public int Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Edit(Pago e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<Pago> getAll()
+        {
+            var res = new List<Pago>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vPagos ORDER BY numero DESC";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    Pago e = null;
+
+                    while (reader.Read())
+                    {
+                        e = new Pago
+                        {
+                            Id = reader.GetInt32(0),
+                            Numero = reader.GetInt32(1),
+                            Fecha = reader.GetDateTime(2),
+                            Importe = reader.GetDecimal(3),
+                            ContratoId = reader.GetInt32(4),
+                            Contrato = new Contrato
+                            {
+                                Id = reader.GetInt32(4),
+                                Desde = reader.GetDateTime(5),
+                                Hasta = reader.GetDateTime(6),
+                                Precio = reader.GetDecimal(7),
+                                InquilinoId = reader.GetInt32(8),
+                                Inquilino = new Inquilino
+                                {
+                                    Id = reader.GetInt32(8),
+                                    PersonaId = reader.GetInt32(9),
+                                    Persona = new Persona()
+                                    {
+                                        Id = reader.GetInt32(9),
+                                        Apellido = reader.GetString(10),
+                                        Nombre = reader.GetString(11)
+                                    }
+                                },
+                                InmuebleId = reader.GetInt32(12),
+                                Inmueble = new Inmueble
+                                {
+                                    Id = reader.GetInt32(12),
+                                    Direccion = reader.GetString(13)
+                                }
+                            }
+                        };
+                        res.Add(e);
+                    }
+
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
+        public Pago getById(int id)
+        {
+            Pago e = null;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vPagos WHERE id = @id";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        e = new Pago
+                        {
+                            Id = reader.GetInt32(0),
+                            Numero = reader.GetInt32(1),
+                            Fecha = reader.GetDateTime(2),
+                            Importe = reader.GetDecimal(3),
+                            ContratoId = reader.GetInt32(4),
+                            Contrato = new Contrato
+                            {
+                                Id = reader.GetInt32(4),
+                                Desde = reader.GetDateTime(5),
+                                Hasta = reader.GetDateTime(6),
+                                Precio = reader.GetDecimal(7),
+                                InquilinoId = reader.GetInt32(8),
+                                Inquilino = new Inquilino
+                                {
+                                    Id = reader.GetInt32(8),
+                                    PersonaId = reader.GetInt32(9),
+                                    Persona = new Persona()
+                                    {
+                                        Id = reader.GetInt32(9),
+                                        Apellido = reader.GetString(10),
+                                        Nombre = reader.GetString(11)
+                                    }
+                                },
+                                InmuebleId = reader.GetInt32(12),
+                                Inmueble = new Inmueble
+                                {
+                                    Id = reader.GetInt32(12),
+                                    Direccion = reader.GetString(13)
+                                }
+                            }
+                        };
+                    }
+                    con.Close();
+                }
+            }
+            return e;
+        }
+    }
+}

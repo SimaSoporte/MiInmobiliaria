@@ -15,15 +15,24 @@
     <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @*<div class="form-group">
-                    <div class="row">
-                        <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
-                        <div class="col-9">
-                            <input asp-for="Id" class="form-control" readonly />
-                            <span asp-validation-for="Id" class="text-danger"></span>
-                        </div>
+            <div class="form-group" hidden>
+                <div class="row">
+                    <div class="col-3"><label asp-for="Id" class="control-label"></label></div>
+                    <div class="col-9">
+                        <input asp-for="Id" class="form-control" readonly />
+                        <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
-                </div>*@
+                </div>
+            </div>
+            <div class="form-group" hidden>
+                <div class="row">
+                    <div class="col-3"><label asp-for="PersonaId" class="control-label"></label></div>
+                    <div class="col-9">
+                        <input asp-for="PersonaId" class="form-control" />
+                        <span asp-validation-for="PersonaId" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
@@ -71,6 +80,15 @@
             </div>
             <div class="form-group">
                 <div class="row">
+                    <div class="col-3"><label asp-for="Persona.Telefono" class="control-label"></label></div>
+                    <div class="col-9">
+                        <input asp-for="Persona.Telefono" class="form-control" type="tel" />
+                        <span asp-validation-for="Persona.Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
                     <div class="col-3"><label asp-for="Persona.Email" class="control-label"></label></div>
                     <div class="col-9">
                         <input asp-for="Persona.Email" class="form-control" type="email" />
@@ -78,7 +96,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <div class="row">
                     <div class="col-3"><label asp-for="Persona.Password" class="control-label"></label></div>
                     <div class="col-9">
@@ -87,36 +105,35 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group" hidden>
+                <div class="row">
+                    <div class="col-3"><label asp-for="Persona.Avatar" class="control-label"></label></div>
+                    <div class="col-9">
+                        <input asp-for="Persona.Avatar" class="form-control" />
+                        <span asp-validation-for="Persona.Avatar" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <div class="row">
-                    <div class="col-3"><label asp-for="Persona.Foto" class="control-label"></label></div>
+                    <div class="col-3"><label asp-for="Persona.AvatarFile" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Persona.Foto" class="form-control" />
-                        <span asp-validation-for="Persona.Foto" class="text-danger"></span>
+                        <input type="file" asp-for="Persona.AvatarFile" name="Persona.AvatarFile" class="form-control" />
+                        <span asp-validation-for="Persona.AvatarFile" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <div class="row">
                     <div class="col-3"><label asp-for="Activo" class="control-label"></label></div>
                     <div class="col-9">
-                        <input class="form-check-input" asp-for="Activo" />
+                        <input class="form-check-input" asp-for="Activo" checked />
                         <span asp-validation-for="Id" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            @*string sql = $"SELECT [id], [idPersona], [activo], [apellido], [nombre], " +
-                $"[fechaNac], [dni], [idTipoPersona], [email], [password], [salt], [foto], [formato], [nombreTipoPersona] " +
-                $"FROM vPropietarios ORDER BY apellido, nombre " +
-                $"WHERE id = @id";*@
-
-            @*<div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" asp-for="Activo" /> @Html.DisplayNameFor(model => model.Activo)
-                    </label>
-                </div>*@
             <div class="form-group">
                 <input type="submit" value="Crear" class="btn btn-primary" /> │ <a asp-action="Index">Volver a la Lista</a>
             </div>

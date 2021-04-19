@@ -1,7 +1,7 @@
 ﻿@model MiInmobiliaria.Models.Propietario
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalle";
 }
 
 <div class="row align-items-baseline">
@@ -52,10 +52,28 @@
                 @Html.DisplayFor(model => model.Persona.Dni)
             </dd>
             <dt class="col-3 col-sm-3">
+                @Html.DisplayNameFor(model => model.Persona.Telefono)
+            </dt>
+            <dd class="col-9 col-sm-9 border form-control">
+                @Html.DisplayFor(model => model.Persona.Telefono)
+            </dd>
+            <dt class="col-3 col-sm-3">
                 @Html.DisplayNameFor(model => model.Persona.Email)
             </dt>
             <dd class="col-9 col-sm-9 border form-control">
                 @Html.DisplayFor(model => model.Persona.Email)
+            </dd>
+            <dt class="col-3 col-sm-3">
+                @Html.DisplayNameFor(model => model.Persona.Avatar)
+            </dt>
+            <dd class="col-9 col-sm-9 ">
+                @if (Model.Persona.Avatar != "")
+                {
+                    <img width="300" src="@Model.Persona.Avatar" /> }
+                else
+                {
+                    <p>Sin avatar</p>
+                }
             </dd>
             <dt class="col-3 col-sm-3">
                 @Html.DisplayNameFor(model => model.Activo)

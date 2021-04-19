@@ -1,0 +1,61 @@
+﻿@model IEnumerable<MiInmobiliaria.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Inmuebles";
+}
+
+<div class="row align-items-baseline">
+    <div class="col">
+        <h2>Lista de Inmuebles</h2>
+    </div>
+    <div class="col text-right">
+        <p class="btn btn-outline-primary"> <a asp-action="Create"><i class="fa fa-plus"></i> Crear Nuevo</a> </p>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> @Html.DisplayNameFor(model => model.Id) </th>
+            <th> @Html.DisplayNameFor(model => model.Direccion) </th>
+            <th> @Html.DisplayNameFor(model => model.Ambientes) </th>
+            <th> @Html.DisplayNameFor(model => model.Precio) </th>
+            <th> @Html.DisplayNameFor(model => model.UsoInmueble) </th>
+            <th> @Html.DisplayNameFor(model => model.TipoInmueble) </th>
+            <th> 
+                <div class="btn"> @Html.ActionLink("Disponible", "getByDisponible") </div>
+            </th>
+            <th> @Html.DisplayNameFor(model => model.Propietario) </th>
+            <th> @Html.DisplayNameFor(model => model.Agencia) </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td> @Html.DisplayFor(modelItem => item.Id) </td>
+            <td> @Html.DisplayFor(modelItem => item.Direccion) </td>
+            <td> @Html.DisplayFor(modelItem => item.Ambientes) </td>
+            <td> @Html.DisplayFor(modelItem => item.Precio) </td>
+            <td> @Html.DisplayFor(modelItem => item.UsoInmueble.Nombre) </td>
+            <td> @Html.DisplayFor(modelItem => item.TipoInmueble.Nombre) </td>
+            <td> @Html.DisplayFor(modelItem => item.Disponible) </td>
+            <td>
+                <a asp-controller="Inmueble" asp-action="getByPropietario" asp-route-id="@item.PropietarioId" title="Mis Propiedades">
+                    @Html.DisplayFor(modelItem => item.Propietario.Persona.Apellido)
+                </a>
+            </td>
+            <td> @Html.DisplayFor(modelItem => item.Agencia.Persona.Apellido) </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+        @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+        @Html.ActionLink("Delete", "Delete", new { id=item.Id })*@
+
+                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
+                <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
+                <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

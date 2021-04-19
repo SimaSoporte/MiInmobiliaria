@@ -24,7 +24,7 @@ namespace MiInmobiliaria.Controllers
         // GET: UsoInmuebleController
         public ActionResult Index()
         {
-            var lista = repositorio.Listar();
+            var lista = repositorio.getAll();
             ViewData[nameof(UsoInmueble)] = lista;
             ViewData["Title"] = nameof(UsoInmueble);
             return View(lista);
@@ -33,7 +33,7 @@ namespace MiInmobiliaria.Controllers
         // GET: UsoInmuebleController/Details/5
         public ActionResult Details(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             //ViewData[nameof(UsoInmueble)] = e;
             return View(e);
         }
@@ -60,10 +60,12 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
         // GET: UsoInmuebleController/Edit/5
         public ActionResult Edit(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
 
@@ -74,7 +76,7 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                repositorio.Editar(e);
+                repositorio.Edit(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -83,10 +85,12 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
         // GET: UsoInmuebleController/Delete/5
         public ActionResult Delete(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
 

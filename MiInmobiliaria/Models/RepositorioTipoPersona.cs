@@ -19,7 +19,8 @@ namespace MiInmobiliaria.Models
             var res = new List<TipoPersona>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT {nameof(TipoPersona.Id)}, {nameof(TipoPersona.Nombre)} FROM {nameof(TipoPersona)}";
+                string sql = $"SELECT Id, nombre FROM TipoPersona";
+
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     con.Open();

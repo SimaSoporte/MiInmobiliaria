@@ -8,13 +8,66 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class RepositorioTipoInmueble : RepositorioBase
+    public class RepositorioTipoInmueble : RepositorioBase, IRepositorioTipoInmueble
     {
         public RepositorioTipoInmueble(IConfiguration configuration) : base(configuration)
         {
         }
 
-        public List<TipoInmueble> Listar()
+        public int Create(TipoInmueble e)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"INSERT INTO {nameof(TipoInmueble)} ({nameof(TipoInmueble.Nombre)}) " +
+                    $"VALUES (@nombre);" +
+                    $"SELECT SCOPE_IDENTITY();";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", e.Nombre);
+                    con.Open();
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+        public int Edit(TipoInmueble e)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"UPDATE {nameof(TipoInmueble)} SET {nameof(TipoInmueble.Nombre)} = @nombre " +
+                    $"WHERE {nameof(TipoInmueble.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@nombre", e.Nombre);
+                    cmd.Parameters.AddWithValue("@id", e.Id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return res;
+        }
+        public int Delete(int id)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"DELETE FROM {nameof(TipoInmueble)} WHERE {nameof(TipoInmueble.Id)} = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+
+            return res;
+        }
+        public IList<TipoInmueble> getAll()
         {
             var res = new List<TipoInmueble>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -40,33 +93,7 @@ namespace MiInmobiliaria.Models
             }
             return res;
         }
-
-
-
-        // TUTORIAL
-        // https://www.youtube.com/watch?v=tiG71g9YnMw
-
-        /// <summary>
-        /// Retorna una List<SelectListItem> para poder llenar un DropDownList
-        /// </summary>
-        /// <returns></returns>
-        public List<SelectListItem> ListarSelectListItem()
-        {
-            List<TipoInmueble> lst = Listar();
-
-            List<SelectListItem> items = lst.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.Nombre.ToString(),
-                    Value = d.Id.ToString()
-                };
-            });
-
-            return items;
-        }
-
-        public TipoInmueble Obtener(int id)
+        public TipoInmueble getById(int id)
         {
             TipoInmueble tipoInmueble = null;
 
@@ -96,62 +123,5 @@ namespace MiInmobiliaria.Models
 
             return tipoInmueble;
         }
-
-        public int Create(TipoInmueble e)
-        {
-            int res = -1;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                string sql = $"INSERT INTO {nameof(TipoInmueble)} ({nameof(TipoInmueble.Nombre)}) " +
-                    $"VALUES (@nombre);" +
-                    $"SELECT SCOPE_IDENTITY();";
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@nombre", e.Nombre);
-                    con.Open();
-                    res = Convert.ToInt32(cmd.ExecuteScalar());
-                    con.Close();
-                }
-            }
-            return res;
-        }
-
-        public int Editar(TipoInmueble e)
-        {
-            int res = -1;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                string sql = $"UPDATE {nameof(TipoInmueble)} SET {nameof(TipoInmueble.Nombre)} = @nombre " +
-                    $"WHERE {nameof(TipoInmueble.Id)} = @id";
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@nombre", e.Nombre);
-                    cmd.Parameters.AddWithValue("@id", e.Id);
-                    con.Open();
-                    res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-            return res;
-        }
-
-        public int Delete(int id)
-        {
-            int res = -1;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                string sql = $"DELETE FROM {nameof(TipoInmueble)} WHERE {nameof(TipoInmueble.Id)} = @id";
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    con.Open();
-                    res = cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
-
-            return res;
-        }
-
     }
 }

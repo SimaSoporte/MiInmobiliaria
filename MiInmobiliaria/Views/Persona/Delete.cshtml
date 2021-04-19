@@ -59,17 +59,18 @@
             <dd class="col-9 col-sm-9 border form-control">
                 @Html.DisplayFor(model => model.Email)
             </dd>
+
             <dt class="col-3 col-sm-3">
-                @Html.DisplayNameFor(model => model.Password)
+                @Html.DisplayNameFor(model => model.Avatar)
             </dt>
-            <dd class="col-9 col-sm-9 border form-control">
-                @Html.DisplayFor(model => model.Password)
-            </dd>
-            <dt class="col-3 col-sm-3">
-                @Html.DisplayNameFor(model => model.Foto)
-            </dt>
-            <dd class="col-9 col-sm-9 border form-control">
-                @Html.DisplayFor(model => model.Foto)
+            <dd class="col-9 col-sm-9 ">
+                @if (Model.Avatar != "")
+                {
+                    <img width="300" src="@Model.Avatar" /> }
+                else
+                {
+                    <p>Sin avatar</p>
+                }
             </dd>
         </dl>
 

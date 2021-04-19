@@ -7,106 +7,10 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class RepositorioInquilino : RepositorioBase
+    public class RepositorioInquilino : RepositorioBase , IRepositorioInquilino
     {
         public RepositorioInquilino(IConfiguration configuration) : base(configuration)
         {
-        }
-
-        public List<Inquilino> Listar()
-        {
-            var res = new List<Inquilino>();
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [TipoPersonaNombre] " +
-                    $"FROM vInquilinos ORDER BY apellido, nombre";
-
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    con.Open();
-                    var reader = cmd.ExecuteReader();
-                    Inquilino inquilino = null;
-
-                    while (reader.Read())
-                    {
-                        inquilino = new Inquilino
-                        {
-                            Id = reader.GetInt32(0),
-                            Persona = new Persona()
-                            {
-                                Id = reader.GetInt32(1),
-                                Apellido = reader.GetString(3),
-                                Nombre = reader.GetString(4),
-                                FechaNac = reader.GetDateTime(5),
-                                Dni = reader.GetString(6),
-                                TipoPersona = new TipoPersona()
-                                {
-                                    Id = reader.GetInt32(7),
-                                    Nombre = reader.GetString(13)
-                                },
-                                Email = reader.GetString(8),
-                                Password = reader.GetString(9),
-                                Salt = reader.GetString(10),
-                                Foto = reader.GetString(11),
-                                Formato = reader.GetString(12)
-                            },
-                            Activo = reader.GetBoolean(2)
-                        };
-                        res.Add(inquilino);
-                    }
-
-                    con.Close();
-                }
-            }
-            return res;
-        }
-
-        public Inquilino Obtener(int id)
-        {
-            Inquilino inquilino = null;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                string sql = $"SELECT [id], [PersonaId], [activo], [apellido], [nombre], " +
-                        $"[fechaNac], [dni], [TipoPersonaId], [email], [password], [salt], [foto], [formato], [TipoPersonaNombre] " +
-                    $"FROM vInquilinos " +
-                    $"WHERE id = {@id} " +
-                    $"ORDER BY apellido, nombre ";
-                using (SqlCommand cmd = new SqlCommand(sql, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-                    con.Open();
-                    var reader = cmd.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        inquilino = new Inquilino
-                        {
-                            Id = reader.GetInt32(0),
-                            Persona = new Persona()
-                            {
-                                Id = reader.GetInt32(1),
-                                Apellido = reader.GetString(3),
-                                Nombre = reader.GetString(4),
-                                FechaNac = reader.GetDateTime(5),
-                                Dni = reader.GetString(6),
-                                TipoPersona = new TipoPersona()
-                                {
-                                    Id = reader.GetInt32(7),
-                                    Nombre = reader.GetString(13)
-                                },
-                                Email = reader.GetString(8),
-                                Password = reader.GetString(9),
-                                Salt = reader.GetString(10),
-                                Foto = reader.GetString(11),
-                                Formato = reader.GetString(12)
-                            },
-                            Activo = reader.GetBoolean(2)
-                        };
-                    }
-                    con.Close();
-                }
-            }
-            return inquilino;
         }
 
         public int Create(Inquilino e)
@@ -114,8 +18,7 @@ namespace MiInmobiliaria.Models
             int res = -1;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"INSERT INTO {nameof(Inquilino)} ( " +
-                    $"PersonaId, {nameof(Inquilino.Activo)} ) " +
+                string sql = $"INSERT INTO Inquilino ( PersonaId, Activo ) " +
                     $"VALUES ( @PersonaId, @activo); " +
                     $"SELECT SCOPE_IDENTITY()";
                 using (SqlCommand cmd = new SqlCommand(sql, con))
@@ -131,13 +34,12 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
-        public int Editar(Inquilino e)
+        public int Edit(Inquilino e)
         {
             int res = -1;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"UPDATE {nameof(Inquilino)} SET {nameof(Inquilino.Activo)} = @activo " +
-                    $"WHERE {nameof(Inquilino.Id)} = @id";
+                string sql = $"UPDATE Inquilino SET Activo = @activo WHERE Id = @id";
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@activo", e.Activo);
@@ -155,7 +57,8 @@ namespace MiInmobiliaria.Models
             int res = -1;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"DELETE FROM {nameof(Inquilino)} WHERE {nameof(Inquilino.Id)} = @id";
+                string sql = $"DELETE FROM Inquilino WHERE Id = @id";
+
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
@@ -167,5 +70,99 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
+
+        public IList<Inquilino> getAll()
+        {
+            var res = new List<Inquilino>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vInquilinos ORDER BY apellido, nombre";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    Inquilino e = null;
+
+                    while (reader.Read())
+                    {
+                        e = new Inquilino
+                        {
+                            Id = reader.GetInt32(0),
+                            PersonaId = reader.GetInt32(1),
+                            Persona = new Persona()
+                            {
+                                Id = reader.GetInt32(1),
+                                Apellido = reader.GetString(2),
+                                Nombre = reader.GetString(3),
+                                FechaNac = reader.GetDateTime(4),
+                                Dni = reader.GetString(5),
+                                TipoPersona = new TipoPersona
+                                {
+                                    Id = reader.GetInt32(6),
+                                    Nombre = reader.GetString(7)
+                                },
+                                Telefono = reader.GetString(8),
+                                Email = reader.GetString(9),
+                                Password = reader.GetString(10),
+                                Rol = reader.GetInt32(11),
+                                Avatar = reader.GetString(12)
+                            },
+                            Activo = reader.GetBoolean(13)
+                        };
+                        res.Add(e);
+                    }
+
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
+        public Inquilino getById(int id)
+        {
+            Inquilino e = null;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vInquilinos WHERE id = @id ORDER BY apellido, nombre ";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        e = new Inquilino
+                        {
+                            Id = reader.GetInt32(0),
+                            PersonaId = reader.GetInt32(1),
+                            Persona = new Persona()
+                            {
+                                Id = reader.GetInt32(1),
+                                Apellido = reader.GetString(2),
+                                Nombre = reader.GetString(3),
+                                FechaNac = reader.GetDateTime(4),
+                                Dni = reader.GetString(5),
+                                TipoPersonaId = reader.GetInt32(6),
+                                TipoPersona = new TipoPersona
+                                {
+                                    Id = reader.GetInt32(6),
+                                    Nombre = reader.GetString(7)
+                                },
+                                Telefono = reader.GetString(8),
+                                Email = reader.GetString(9),
+                                Password = reader.GetString(10),
+                                Rol = reader.GetInt32(11),
+                                Avatar = reader.GetString(12)
+                            },
+                            Activo = reader.GetBoolean(13)
+                        };
+                    }
+                    con.Close();
+                }
+            }
+            return e;
+        }
     }
 }

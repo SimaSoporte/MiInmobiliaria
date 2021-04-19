@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
@@ -13,31 +14,38 @@ namespace MiInmobiliaria.Controllers
     public class InquilinoController : Controller
     {
         private readonly IConfiguration configuration;
+        private readonly IWebHostEnvironment environment;
         private readonly RepositorioInquilino repositorio;
         private readonly RepositorioTipoPersona repositorioTipoPersona;
         private readonly RepositorioPersona repositorioPersona;
+        private readonly Utils utils;
 
-        public InquilinoController(IConfiguration configuration)
+        public InquilinoController(IConfiguration configuration, IWebHostEnvironment environment)
         {
             this.configuration = configuration;
+            this.environment = environment;
             this.repositorio = new RepositorioInquilino(configuration);
             this.repositorioTipoPersona = new RepositorioTipoPersona(configuration);
             this.repositorioPersona = new RepositorioPersona(configuration);
+            utils = new Utils(configuration, environment);
         }
 
         // GET: PropietarioController
         public ActionResult Index()
         {
-            var lista = repositorio.Listar();
+            var lista = repositorio.getAll();
             return View(lista);
         }
+
 
         // GET: PropietarioController/Details/5
         public ActionResult Details(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
+
+
 
         // GET: PropietarioController/Create
         public ActionResult Create()
@@ -51,19 +59,28 @@ namespace MiInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Inquilino e)
         {
-            Persona p = repositorioPersona.Obtener(e.Persona.Dni, e.Persona.Email);
+            Persona p = repositorioPersona.getByDniEmail(e.Persona.Dni, e.Persona.Email);
             if (p != null)
                 e.Persona = p;
             else
             {
                 e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
-                e.Persona.Salt = "";
-                e.Persona.Formato = "";
+                e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
+                e.Persona.Password = "";
+                //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
+                e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Propietario")).Key;
+                e.Persona.Avatar = "";
                 e.Persona.Id = repositorioPersona.Create(e.Persona);
+                if (e.Persona.AvatarFile != null)
+                {
+                    e.Persona.Avatar = utils.uploadFile(e.Persona);
+                }
+                repositorioPersona.Edit(e.Persona);
             }
 
             try
             {
+                e.Activo = true;
                 repositorio.Create(e);
                 return RedirectToAction(nameof(Index));
             }
@@ -73,12 +90,13 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
         // GET: PropietarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
-            var e = repositorio.Obtener(id);
-            e.Id = id;
+            ViewBag.TipoPersona = repositorioTipoPersona.Listar();
+            var e = repositorio.getById(id);
             return View(e);
         }
 
@@ -89,13 +107,25 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                e.Persona.Formato = "";
-                repositorioPersona.Editar(e.Persona);
-                repositorio.Editar(e);
+                e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
+                e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
+                e.Persona.Password = "";
+                //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
+                e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Inquilino")).Key;
+                e.Persona.Avatar = "";
+                if (e.Persona.AvatarFile != null)
+                {
+                    e.Persona.Avatar = utils.uploadFile(e.Persona);
+                }
+                repositorioPersona.Edit(e.Persona);
+
+                e.Activo = true;
+                repositorio.Edit(e);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
                 return View();
             }
         }
@@ -103,7 +133,7 @@ namespace MiInmobiliaria.Controllers
         // GET: PropietarioController/Delete/5
         public ActionResult Delete(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
 

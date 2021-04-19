@@ -1,0 +1,54 @@
+﻿@model IEnumerable<MiInmobiliaria.Models.Contrato>
+
+@{
+    ViewData["Title"] = "Contratos";
+}
+
+<div class="row align-items-baseline">
+    <div class="col">
+        <h2>Lista de Contratos</h2>
+    </div>
+    <div class="col text-right">
+        <p class="btn btn-outline-primary"> <a asp-action="Create"><i class="fa fa-plus"></i> Crear Nuevo</a> </p>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th> @Html.DisplayNameFor(model => model.Id) </th>
+            <th> @Html.DisplayNameFor(model => model.Inmueble.Direccion) </th>
+            <th> Inquilino </th>
+            <th> Garante </th>
+            <th> @Html.DisplayNameFor(model => model.Desde) </th>
+            <th> @Html.DisplayNameFor(model => model.Hasta) </th>
+            <th> @Html.DisplayNameFor(model => model.Precio) </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td> @Html.DisplayFor(modelItem => item.Id) </td>
+                <td> @Html.DisplayFor(modelItem => item.Inmueble.Direccion) </td>
+                <td> @Html.DisplayFor(modelItem => item.Inquilino.Persona.Apellido) @Html.DisplayFor(modelItem => item.Inquilino.Persona.Nombre) </td>
+                <td> @Html.DisplayFor(modelItem => item.Garante.Persona.Apellido) @Html.DisplayFor(modelItem => item.Garante.Persona.Nombre) </td>
+                <td> @Html.DisplayFor(modelItem => item.Desde) </td>
+                <td> @Html.DisplayFor(modelItem => item.Hasta) </td>
+                <td> @Html.DisplayFor(modelItem => item.Precio) </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a> |
+
+                    <a asp-controller="Pago" asp-action="RegistrarPago" asp-route-id="@item.Id" title="Registrar pago" class="text-success"> <i class="fas fa-cash-register"></i> </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

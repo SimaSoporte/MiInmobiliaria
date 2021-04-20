@@ -42,17 +42,7 @@ namespace MiInmobiliaria.Controllers
             return View(lista);
         }
 
-        public ActionResult getByPropietario(int id)
-        {
-            var list = repositorio.getAll(id);
-            return View("Index", list);
-        }
 
-        public ActionResult getByDisponible()
-        {
-            var list = repositorio.getAllDisponible();
-            return View("Index", list);
-        }
 
         // GET: InmuebleController/Details/5
         public ActionResult Details(int id)
@@ -161,5 +151,43 @@ namespace MiInmobiliaria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+
+
+
+        public ActionResult getByDisponible()
+        {
+            var list = repositorio.getAllDisponible();
+            return View("Index", list);
+        }
+
+
+        public ActionResult getByPropietario(int id)
+        {
+            var e = repositorioPropietario.getById(id);
+            var list = repositorio.getAll(e);
+            return View("Index", list);
+        }
+
+        public ActionResult getByAgencia(int id)
+        {
+            var e = repositorioAgencia.getById(id);
+            var list = repositorio.getAll(e);
+            return View("Index", list);
+        }
+
+        // GET: ContratoController
+        public ActionResult desocupados(DateTime desde, DateTime hasta)
+        {
+            //string desde = dia.ToString() + "/" + mes.ToString() + "/" + anio.ToString();
+            //desde = "01/01/2020";
+            //string hasta = DateTime.Now.ToShortDateString().ToString();
+            //hasta = "01/02/2020";
+            desde = DateTime.Now.AddDays(-365);
+            hasta = DateTime.Now.AddDays(365);
+            var lista = repositorio.getDesocupados(desde, hasta);
+            return View("Index", lista);
+        }
+
     }
 }

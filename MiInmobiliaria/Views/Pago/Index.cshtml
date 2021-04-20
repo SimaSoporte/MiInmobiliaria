@@ -9,7 +9,7 @@
         <h2>Lista de Pagos</h2>
     </div>
     <div class="col text-right">
-        <p class="btn btn-outline-primary"> <a asp-action="Create"><i class="fa fa-plus"></i> Crear Nuevo</a> </p>
+        <p class="btn btn-outline-primary disabled"> <a asp-action="Create" hidden> <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
     </div>
 </div>
 
@@ -53,9 +53,14 @@
                 @Html.DisplayFor(modelItem => item.ContratoId)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+
+                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
+                <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
+                <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a>
+
             </td>
         </tr>
 }

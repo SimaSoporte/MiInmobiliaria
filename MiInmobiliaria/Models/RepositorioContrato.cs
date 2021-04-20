@@ -57,7 +57,28 @@ namespace MiInmobiliaria.Models
 
         public int Edit(Contrato e)
         {
-            throw new NotImplementedException();
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"UPDATE Contrato " +
+                        $"SET InmuebleId = @InmuebleId, InquilinoId = @InquilinoId, " +
+                            $"GaranteId = @GaranteId, desde = @desde, hasta = @hasta, precio = @precio " +
+                    $"WHERE Id = @id";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@InmuebleId", e.InmuebleId);
+                    cmd.Parameters.AddWithValue("@InquilinoId", e.InquilinoId);
+                    cmd.Parameters.AddWithValue("@GaranteId", e.GaranteId);
+                    cmd.Parameters.AddWithValue("@desde", e.Desde);
+                    cmd.Parameters.AddWithValue("@hasta", e.Hasta);
+                    cmd.Parameters.AddWithValue("@precio", e.Precio);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return res;
         }
 
         public IList<Contrato> getAll()
@@ -175,7 +196,7 @@ namespace MiInmobiliaria.Models
             }
             return res;
         }
-        public IList<Contrato> getAllInmueble(int inmuebleId)
+        public IList<Contrato> getByInmueble(int inmuebleId)
         {
             var res = new List<Contrato>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -293,5 +314,6 @@ namespace MiInmobiliaria.Models
             }
             return e;
         }
+
     }
 }

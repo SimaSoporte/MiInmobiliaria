@@ -131,5 +131,21 @@ namespace MiInmobiliaria.Controllers
                 return RedirectToAction(nameof(Index));
             }
         }
+
+
+        // GET: ContratoController
+        public ActionResult Vigentes()
+        {
+            var lista = repositorio.getAllVigentes();
+            return View("Index",lista);
+        }
+
+        // GET: ContratoController
+        public ActionResult getByInmueble(int Id)
+        {
+            var lista = repositorio.getByInmueble(Id);
+            return View("Index", lista);
+        }
+
     }
 }

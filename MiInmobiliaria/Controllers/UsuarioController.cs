@@ -37,12 +37,13 @@ namespace MiInmobiliaria.Controllers
 
                 
         // GET: Usuarios/Login/
-        // [AllowAnonymous]
+        [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             TempData["returnUrl"] = returnUrl;
             return View();
         }
+
 
         // POST: Usuarios/Login/
         [HttpPost]
@@ -98,7 +99,7 @@ namespace MiInmobiliaria.Controllers
 
 
 
-
+        [Authorize(Policy = "Administrador")]
         // GET: UsuarioController
         public ActionResult Index()
         {
@@ -106,6 +107,8 @@ namespace MiInmobiliaria.Controllers
             return View(lista);
         }
 
+
+        [Authorize(Policy = "Administrador")]
         // GET: UsuarioController/Details/5
         public ActionResult Details(int id)
         {
@@ -114,7 +117,7 @@ namespace MiInmobiliaria.Controllers
         }
 
 
-
+        [Authorize(Policy = "Administrador")]
         // GET: UsuarioController/Create
         public ActionResult Create()
         {
@@ -124,6 +127,7 @@ namespace MiInmobiliaria.Controllers
             return View();
         }
 
+        [Authorize(Policy = "Administrador")]
         // POST: UsuarioController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -168,6 +172,20 @@ namespace MiInmobiliaria.Controllers
 
 
 
+
+        // GET: Usuarios/Edit/5
+        [Authorize]
+        public ActionResult Perfil()
+        {
+            ViewBag.TiposPersona = repositorioTipoPersona.Listar();
+            ViewData["Title"] = "Mi perfil";
+            var u = repositorio.getByEmail(User.Identity.Name);
+            ViewBag.Roles = Persona.ObtenerRoles();
+            return View("Edit", u);
+        }
+
+
+        [Authorize(Policy = "Administrador")]
         // GET: UsuarioController/Edit/5
         public ActionResult Edit(int id)
         {
@@ -177,6 +195,7 @@ namespace MiInmobiliaria.Controllers
             return View(e);
         }
 
+        [Authorize]
         // POST: UsuarioController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -210,6 +229,7 @@ namespace MiInmobiliaria.Controllers
 
 
 
+        [Authorize(Policy = "Administrador")]
         // GET: UsuarioController/Delete/5
         public ActionResult Delete(int id)
         {
@@ -217,6 +237,7 @@ namespace MiInmobiliaria.Controllers
             return View(e);
         }
 
+        [Authorize(Policy = "Administrador")]
         // POST: UsuarioController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

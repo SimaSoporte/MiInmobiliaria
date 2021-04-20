@@ -36,12 +36,42 @@ namespace MiInmobiliaria.Models
 
         public int Delete(int id)
         {
-            throw new NotImplementedException();
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"DELETE FROM Pago WHERE Id = @id";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return res;
         }
 
         public int Edit(Pago e)
         {
-            throw new NotImplementedException();
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"UPDATE Pago " +
+                        $"SET numero = @numero, fecha = @fecha, importe = @importe " +
+                    $"WHERE Id = @id";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@numero", e.Numero);
+                    cmd.Parameters.AddWithValue("@fecha", e.Fecha);
+                    cmd.Parameters.AddWithValue("@importe", e.Importe);
+                    cmd.Parameters.AddWithValue("@Id", e.Id);
+                    con.Open();
+                    res = cmd.ExecuteNonQuery();
+                    con.Close();
+                }
+            }
+            return res;
         }
 
         public IList<Pago> getAll()

@@ -169,7 +169,7 @@ namespace MiInmobiliaria.Models
             }
             return res;
         }
-        public IList<Inmueble> getAll(int propietarioId)
+        public IList<Inmueble> getAll(Propietario p)
         {
             var res = new List<Inmueble>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -179,7 +179,7 @@ namespace MiInmobiliaria.Models
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
-                    cmd.Parameters.AddWithValue("@PropietarioId", propietarioId);
+                    cmd.Parameters.AddWithValue("@PropietarioId", p.Id);
                     con.Open();
                     var reader = cmd.ExecuteReader();
                     Inmueble e = null;
@@ -245,6 +245,84 @@ namespace MiInmobiliaria.Models
             }
             return res;
         }
+
+        public IList<Inmueble> getAll(Agencia a)
+        {
+            var res = new List<Inmueble>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vInmuebles " +
+                    $"WHERE (PropietarioId = @PropietarioId OR @PropietarioId = 0 ) ";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@AgenciaId", a.Id);
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    Inmueble e = null;
+                    while (reader.Read())
+                    {
+                        e = new Inmueble()
+                        {
+                            Id = reader.GetInt32(0),
+                            Direccion = reader.GetString(1),
+                            Ambientes = reader.GetInt32(2),
+                            Precio = reader.GetDecimal(3),
+                            UsoInmuebleId = reader.GetInt32(4),
+                            UsoInmueble = new UsoInmueble
+                            {
+                                Id = reader.GetInt32(4),
+                                Nombre = reader.GetString(5)
+                            },
+                            TipoInmuebleId = reader.GetInt32(6),
+                            TipoInmueble = new TipoInmueble
+                            {
+                                Id = reader.GetInt32(6),
+                                Nombre = reader.GetString(7),
+                            },
+                            Disponible = reader.GetBoolean(8),
+                            PropietarioId = reader.GetInt32(9),
+                            Propietario = new Propietario
+                            {
+                                Id = reader.GetInt32(9),
+                                Persona = new Persona
+                                {
+                                    Apellido = reader.GetString(10),
+                                    Nombre = reader.GetString(11),
+                                    TipoPersona = new TipoPersona
+                                    {
+                                        Id = reader.GetInt32(12),
+                                        Nombre = reader.GetString(13)
+                                    }
+                                },
+                                Activo = reader.GetBoolean(14)
+                            },
+                            AgenciaId = reader.GetInt32(15),
+                            Agencia = new Agencia
+                            {
+                                Id = reader.GetInt32(15),
+                                Persona = new Persona
+                                {
+                                    Apellido = reader.GetString(16),
+                                    Nombre = reader.GetString(17),
+                                    TipoPersona = new TipoPersona
+                                    {
+                                        Id = reader.GetInt32(18),
+                                        Nombre = reader.GetString(19)
+                                    }
+                                },
+                                Activo = reader.GetBoolean(20)
+                            },
+                            Avatar = reader.GetString(21)
+                        };
+                        res.Add(e);
+                    }
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
         public IList<Inmueble> getAllDisponible()
         {
             var res = new List<Inmueble>();
@@ -393,5 +471,90 @@ namespace MiInmobiliaria.Models
             }
             return e;
         }
+
+
+
+
+        public IList<Inmueble> getDesocupados(DateTime desde, DateTime hasta)
+        {
+            var res = new List<Inmueble>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT * FROM vInmuebles " +
+                    $"WHERE Id NOT IN " +
+                    $"( SELECT InmuebleId FROM vContratos " +
+                    $"      WHERE desde BETWEEN @desde AND @hasta " +
+                    $"          OR hasta BETWEEN @desde AND @hasta ) ";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@desde", desde);
+                    cmd.Parameters.AddWithValue("@hasta", hasta);
+                    con.Open();
+                    var reader = cmd.ExecuteReader();
+                    Inmueble e = null;
+                    while (reader.Read())
+                    {
+                        e = new Inmueble()
+                        {
+                            Id = reader.GetInt32(0),
+                            Direccion = reader.GetString(1),
+                            Ambientes = reader.GetInt32(2),
+                            Precio = reader.GetDecimal(3),
+                            UsoInmuebleId = reader.GetInt32(4),
+                            UsoInmueble = new UsoInmueble
+                            {
+                                Id = reader.GetInt32(4),
+                                Nombre = reader.GetString(5)
+                            },
+                            TipoInmuebleId = reader.GetInt32(6),
+                            TipoInmueble = new TipoInmueble
+                            {
+                                Id = reader.GetInt32(6),
+                                Nombre = reader.GetString(7),
+                            },
+                            Disponible = reader.GetBoolean(8),
+                            PropietarioId = reader.GetInt32(9),
+                            Propietario = new Propietario
+                            {
+                                Id = reader.GetInt32(9),
+                                Persona = new Persona
+                                {
+                                    Apellido = reader.GetString(10),
+                                    Nombre = reader.GetString(11),
+                                    TipoPersona = new TipoPersona
+                                    {
+                                        Id = reader.GetInt32(12),
+                                        Nombre = reader.GetString(13)
+                                    }
+                                },
+                                Activo = reader.GetBoolean(14)
+                            },
+                            AgenciaId = reader.GetInt32(15),
+                            Agencia = new Agencia
+                            {
+                                Id = reader.GetInt32(15),
+                                Persona = new Persona
+                                {
+                                    Apellido = reader.GetString(16),
+                                    Nombre = reader.GetString(17),
+                                    TipoPersona = new TipoPersona
+                                    {
+                                        Id = reader.GetInt32(18),
+                                        Nombre = reader.GetString(19)
+                                    }
+                                },
+                                Activo = reader.GetBoolean(20)
+                            },
+                            Avatar = reader.GetString(21)
+                        };
+                        res.Add(e);
+                    }
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
     }
 }

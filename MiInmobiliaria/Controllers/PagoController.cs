@@ -81,21 +81,30 @@ namespace MiInmobiliaria.Controllers
         // GET: PagoController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var e = repositorio.getById(id);
+            ViewBag.Contrato = repositorioContrato.getById(e.ContratoId);
+            return View(e);
         }
 
         // POST: PagoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Pago e)
         {
             try
             {
+                repositorio.Edit(e);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (SqlException ex)
             {
-                return View();
+                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el tipo Persona porque esta utilizado" : "Ocurrio un error.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
             }
         }
 

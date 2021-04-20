@@ -36,7 +36,9 @@ namespace MiInmobiliaria.Controllers
         // GET: PagoController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var e = repositorio.getById(id);
+            ViewBag.Contrato = repositorioContrato.getById(e.ContratoId);
+            return View(e);
         }
 
 
@@ -113,7 +115,9 @@ namespace MiInmobiliaria.Controllers
         // GET: PagoController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var e = repositorio.getById(id);
+            ViewBag.Contrato = repositorioContrato.getById(e.ContratoId);
+            return View(e);
         }
 
         // POST: PagoController/Delete/5

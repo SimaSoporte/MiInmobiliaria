@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Editar";
+    var ok = false;
+    if ( User.Identity.IsAuthenticated && (User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador")) ) {
+        ok = true;
+    }
 }
 
 <div class="row align-items-baseline">
@@ -125,10 +129,10 @@
                 <div class="row">
                     <div class="col-3"><label class="control-label">Rol</label></div>
                     <div class="col-9">
-                        <select class="form-control" name="Persona.Rol">
+                        <select class="form-control" name="Persona.Rol" @(ok ? "" : "disabled") >
                             @foreach (var kvp in (IDictionary<int, string>)ViewBag.Roles)
                             {
-                                @:<option  @(kvp.Key == Model.Persona.Rol ? "selected" : "")  value="@kvp.Key">@kvp.Value</option>
+                                @:<option @(kvp.Key == Model.Persona.Rol ? "selected" : "") value="@kvp.Key">@kvp.Value</option>
                             }
                         </select>
                         <span asp-validation-for="Persona.Rol" class="text-danger"></span>

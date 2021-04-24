@@ -10,18 +10,45 @@
     </div>
 
     <div class="col text-right">
-        <p class="btn btn-outline-primary"> <a asp-action="Vigentes"> <i class="fas fa-search"></i> Vigentes</a> </p>
+        <p class="btn btn-outline-primary">
+            <a asp-action="Vigentes">
+                @if ((Boolean)ViewBag.filtroVigente)
+                {
+                    <i class="fas fa-filter text-danger"></i>
+                }
+                else
+                {
+                    <i class="fas fa-search text-primary"></i>
+                }
+                Vigentes
+            </a>
+        </p>
     </div>
     <div class="col text-right">
         <p class="btn btn-outline-primary"> <a asp-action="Create"> <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
     </div>
 </div>
 
+
+@if ((Boolean)ViewBag.filtroInmueble)
+{
+    Inmueble e = (Inmueble)ViewBag.Inmueble;    
+    <label>Inmueble: </label> @e.Direccion <label>  Ambienrtes: </label> @e.Ambientes
+
+}
+
+
 <table class="table">
     <thead>
         <tr>
             <th> @Html.DisplayNameFor(model => model.Id) </th>
-            <th> @Html.DisplayNameFor(model => model.Inmueble.Direccion) </th>
+            <th>
+                @if ((Boolean)ViewBag.filtroInmueble)
+                {
+                    <i class="fas fa-filter text-danger"></i>
+                }
+                @Html.DisplayNameFor(model => model.Inmueble)
+            </th>
             <th> Inquilino </th>
             <th> Garante </th>
             <th> @Html.DisplayNameFor(model => model.Desde) </th>
@@ -46,11 +73,21 @@
                         @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
                         @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
 
-                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
-                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
-                    <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a> |
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"> <i class="far fa-edit"></i> </a> │
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"> <i class="fas fa-bars"></i> </a> │
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"> <i class="far fa-trash-alt"></i> </a> |
 
-                    <a asp-controller="Pago" asp-action="RegistrarPago" asp-route-id="@item.Id" title="Registrar pago" class="text-success"> <i class="fas fa-cash-register"></i> </a>
+                    <a asp-controller="Pago" asp-action="RegistrarPago" asp-route-id="@item.Id" title="Registrar pago" class="text-success"> <i class="fas fa-cash-register"></i> </a> |
+                    <a asp-controller="Pago" asp-action="VerPagos" asp-route-id="@item.Id" title="Ver pagos" class="text-secondary"> <i class="fas fa-money-check-alt"></i> </a> |
+
+                    @if (item.Hasta > DateTime.Now) // Se puede cancelar
+                    {
+                        <a asp-controller="Contrato" asp-action="Cancelar" asp-route-id="@item.Id" title="Cancelar contrato" class="text-warning"> <i class="fas fa-store-alt-slash"></i> </a>
+                    }
+                    else // Se puede Renovar
+                    {
+                        <a asp-controller="Contrato" asp-action="Renovar" asp-route-id="@item.Id" title="Renovar contrato" class="text-secondary float-right"> <i class="fas fa-recycle"></i> </a>
+                    }
                 </td>
             </tr>
         }

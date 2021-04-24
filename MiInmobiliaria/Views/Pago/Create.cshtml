@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-3"> <label asp-for="Importe" class="control-label"></label> </div>
                     <div class="col-9">
-                        <input asp-for="Importe" class="form-control" />
+                        <input asp-for="Importe" class="form-control" value="@contrato.Precio" />
                         <span asp-validation-for="Importe" class="text-danger"></span>
                     </div>
                 </div>

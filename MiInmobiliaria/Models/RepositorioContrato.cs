@@ -38,6 +38,31 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
+        public int Renovar(Contrato e)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"INSERT INTO contrato (InmuebleId, InquilinoId, GaranteId, " +
+                    $"desde, hasta, precio) " +
+                    $"VALUES ( @InmuebleId, @InquilinoId, @GaranteId, @desde, @hasta, @precio); " +
+                    $"SELECT SCOPE_IDENTITY()";
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@InmuebleId", e.InmuebleId);
+                    cmd.Parameters.AddWithValue("@InquilinoId", e.InquilinoId);
+                    cmd.Parameters.AddWithValue("@GaranteId", e.GaranteId);
+                    cmd.Parameters.AddWithValue("@desde", e.Desde);
+                    cmd.Parameters.AddWithValue("@hasta", e.Hasta);
+                    cmd.Parameters.AddWithValue("@precio", e.Precio);
+                    con.Open();
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+
         public int Delete(int id)
         {
             int res = -1;
@@ -73,6 +98,7 @@ namespace MiInmobiliaria.Models
                     cmd.Parameters.AddWithValue("@desde", e.Desde);
                     cmd.Parameters.AddWithValue("@hasta", e.Hasta);
                     cmd.Parameters.AddWithValue("@precio", e.Precio);
+                    cmd.Parameters.AddWithValue("@Id", e.Id);
                     con.Open();
                     res = cmd.ExecuteNonQuery();
                     con.Close();
@@ -313,6 +339,13 @@ namespace MiInmobiliaria.Models
                 }
             }
             return e;
+        }
+
+        public Decimal calcularMulta(Contrato e)
+        {
+            decimal importe = 0;
+
+            return importe;
         }
 
     }

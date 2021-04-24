@@ -39,6 +39,10 @@ namespace MiInmobiliaria.Controllers
         public ActionResult Index()
         {
             var lista = repositorio.getAll();
+            ViewBag.filtroDesocupado = false;
+            ViewBag.filtroDisponible = false;
+            ViewBag.filtroPropietario = false;
+            ViewData["Error"] = TempData["Error"];
             return View(lista);
         }
 
@@ -158,14 +162,20 @@ namespace MiInmobiliaria.Controllers
         public ActionResult getByDisponible()
         {
             var list = repositorio.getAllDisponible();
+            ViewBag.filtroDesocupado = false;
+            ViewBag.filtroDisponible = true;
+            ViewBag.filtroPropietario = false;
             return View("Index", list);
         }
 
 
         public ActionResult getByPropietario(int id)
         {
-            var e = repositorioPropietario.getById(id);
-            var list = repositorio.getAll(e);
+            ViewBag.Propietario = repositorioPropietario.getById(id);
+            var list = repositorio.getAll( (Propietario)ViewBag.Propietario );
+            ViewBag.filtroDesocupado = false;
+            ViewBag.filtroDisponible = false;
+            ViewBag.filtroPropietario = true;
             return View("Index", list);
         }
 
@@ -177,16 +187,21 @@ namespace MiInmobiliaria.Controllers
         }
 
         // GET: ContratoController
-        public ActionResult desocupados(DateTime desde, DateTime hasta)
+        public ActionResult Desocupados(DateTime desde, DateTime hasta)
         {
-            //string desde = dia.ToString() + "/" + mes.ToString() + "/" + anio.ToString();
-            //desde = "01/01/2020";
-            //string hasta = DateTime.Now.ToShortDateString().ToString();
-            //hasta = "01/02/2020";
-            desde = DateTime.Now.AddDays(-365);
-            hasta = DateTime.Now.AddDays(365);
-            var lista = repositorio.getDesocupados(desde, hasta);
-            return View("Index", lista);
+            if (desde <= hasta)
+            {
+                var lista = repositorio.getDesocupados(desde, hasta);
+                ViewBag.filtroDesocupado = true;
+                ViewBag.filtroDisponible = false;
+                ViewBag.filtroPropietario = false;
+                return View("Index", lista);
+            } else
+            {
+                TempData["Error"] = "Error en las fechas desde hasta. Desde no debe ser mayor que hasta.";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
     }

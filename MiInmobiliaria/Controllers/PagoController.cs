@@ -79,6 +79,14 @@ namespace MiInmobiliaria.Controllers
             return View("Create");
         }
 
+        public ActionResult VerPagos(int Id)
+        {
+            var lista = repositorio.getAll(Id);
+            return View("Index", lista);
+        }
+
+
+
 
         // GET: PagoController/Edit/5
         public ActionResult Edit(int id)

@@ -20,6 +20,8 @@ namespace MiInmobiliaria.Controllers
         private readonly RepositorioInquilino repositorioInquilino;
         private readonly RepositorioGarante repositorioGarante;
 
+        private Inmueble inmueble = new Inmueble();
+
         public ContratoController(IConfiguration configuration, IWebHostEnvironment environment)
         {
             this.configuration = configuration;
@@ -35,6 +37,9 @@ namespace MiInmobiliaria.Controllers
         public ActionResult Index()
         {
             var lista = repositorio.getAll();
+            ViewBag.filtroVigente = false;
+            ViewBag.filtroInmueble = false;
+            ViewData["Error"] = TempData["Error"];
             return View(lista);
         }
 
@@ -91,15 +96,21 @@ namespace MiInmobiliaria.Controllers
         // POST: ContratoController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Contrato e)
         {
+            ViewBag.filtroVigente = false;
             try
             {
+                repositorio.Edit(e);
+                ViewBag.Inmuebles = repositorioInmueble.getAll();
+                ViewBag.Inquilinos = repositorioInquilino.getAll();
+                ViewBag.Garantes = repositorioGarante.getAll();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -115,6 +126,7 @@ namespace MiInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Contrato e)
         {
+            ViewBag.filtroVigente = false;
             try
             {
                 repositorio.Delete(id);
@@ -137,15 +149,73 @@ namespace MiInmobiliaria.Controllers
         public ActionResult Vigentes()
         {
             var lista = repositorio.getAllVigentes();
-            return View("Index",lista);
+            ViewBag.filtroVigente = true;
+            ViewBag.filtroInmueble = false;
+            return View("Index", lista);
         }
+
+        // GET: ContratoController
+        public ActionResult Renovar(int Id)
+        {
+            var e = repositorio.getById(Id);
+            TimeSpan difFechas = e.Hasta - e.Desde;
+            e.Desde = DateTime.Now;
+            e.Hasta = DateTime.Now.AddDays(difFechas.Days);
+            return View(e);
+        }
+
+        [HttpPost]
+        public ActionResult Renovar(int Id, Contrato e)
+        {
+            ViewBag.filtroVigente = false;
+            try
+            {
+                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, Id) != null)
+                {
+                    repositorio.Renovar(e);
+                }
+                else
+                {
+                    TempData["Error"] = "Error: Inmueble ocupado entre las fechas dadas.";
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+
 
         // GET: ContratoController
         public ActionResult getByInmueble(int Id)
         {
+            ViewBag.Inmueble = repositorioInmueble.getById(Id);
             var lista = repositorio.getByInmueble(Id);
+            ViewBag.filtroVigente = false;
+            ViewBag.filtroInmueble = true;
+            inmueble = repositorioInmueble.getById(Id);
             return View("Index", lista);
         }
 
+
+        // GET: ContratoController/Edit/5
+        public ActionResult Cancelar(int id)
+        {
+            var e = repositorio.getById(id);
+            return View(e);
+        }
+
+        [HttpPost]
+        public ActionResult Cancelar(int id, Contrato e)
+        {
+
+            //var e = repositorio.getById(id);
+            return View();
+        }
     }
 }

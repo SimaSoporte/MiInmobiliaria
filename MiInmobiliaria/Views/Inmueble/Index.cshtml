@@ -6,37 +6,45 @@
     var hasta = DateTime.Now;
 }
 
-<form asp-action="desocupados" >
-<div class="row align-items-baseline">
-    <div class="col-3">
-        <h3>Lista de Inmuebles</h3>
-    </div>
+<form asp-action="Desocupados" method="post">
+    <div class="row align-items-baseline">
+        <div class="col-3">
+            <h3>Lista de Inmuebles</h3>
+        </div>
 
-    <div class="col-1">
-        <label class="d-inline">Desocupados</label>
-    </div>
-    <div class="col">
-        @*<input type="date" id="desde" name="desde" value="" class="form-control" />*@
-        <input type="date" asp-for="@desde" class="form-control" />
-    </div>
-    <div class="col">
-        @*<input type="date" id="hasta" name="hasta" value="" class="form-control" />*@
-        <input type="date" asp-for="@hasta" class="form-control" />
-    </div>
-    <div class="col">
-        @*<p class="btn btn-outline-primary"> <a asp-action="Desocupados" asp-route-id="@desde.ToShortDateString().ToString()" title="Desocupados"> <i class="fas fa-search"></i> </a> </p>*@
+        <div class="col">
+            <input type="date" name="desde" asp-for="@desde" class="form-control" />
+        </div>
+        <div class="col">
+            <input type="date" name="hasta" asp-for="@hasta" class="form-control" />
+        </div>
+        <div class="col">
+            <p class="btn btn-outline-primary">
+                @if ((Boolean)ViewBag.filtroDesocupado)
+                {
+                    <i class="fas fa-filter text-danger"></i>
+                }
+                else
+                {
+                    <i class="fas fa-search text-primary"></i>
+                }
+                <button asp-controller="Inmueble" asp-action="Desocupados" class="border-0 btn btn-primary-outline btn-sm">Desocupados</button>
+            </p>
+        </div>
 
-        <div class="btn btn-outline-primary">
-            @*@Html.ActionLink("Desocupados", "desocupados", "Inmueble", new { anio = desde.Year, mes = desde.Month, dia = desde.Day })*@
-            @Html.ActionLink("Desocupados", "desocupados", new { desde = desde, hasta = hasta })
+        <div class="col text-right">
+            <p class="btn btn-outline-primary"> <a asp-action="Create"><i class="fa fa-plus"></i> Nuevo</a> </p>
         </div>
     </div>
+</form>
 
-    <div class="col text-right">
-        <p class="btn btn-outline-primary"> <a asp-action="Create"><i class="fa fa-plus"></i> Nuevo</a> </p>
-    </div>
-</div>
-    </form>
+
+@if ((Boolean)ViewBag.filtroPropietario)
+{
+    Propietario e = (Propietario)ViewBag.Propietario;
+    <label>Propietario: </label> @e.Persona.Apellido <label> </label> @e.Persona.Nombre
+}
+
 
 <table class="table">
     <thead>
@@ -48,9 +56,21 @@
             @*<th> @Html.DisplayNameFor(model => model.UsoInmueble) </th>*@
             <th> @Html.DisplayNameFor(model => model.TipoInmueble) </th>
             <th>
-                <div class="btn"> @Html.ActionLink("Disponible", "getByDisponible") </div>
+                <div class="btn">
+                    @if ((Boolean)ViewBag.filtroDisponible)
+                    {
+                        <i class="fas fa-filter text-danger"></i>
+                    }
+                    @Html.ActionLink("Disponible", "getByDisponible")
+                </div>
             </th>
-            <th> @Html.DisplayNameFor(model => model.Propietario) </th>
+            <th>
+                @if ((Boolean)ViewBag.filtroPropietario)
+                {
+                    <i class="fas fa-filter text-danger"></i>
+                }
+                @Html.DisplayNameFor(model => model.Propietario)
+            </th>
             <th> @Html.DisplayNameFor(model => model.Agencia) </th>
             <th></th>
         </tr>
@@ -61,11 +81,17 @@
             <tr>
                 <td> @Html.DisplayFor(modelItem => item.Id) </td>
                 <td> @Html.DisplayFor(modelItem => item.Direccion) </td>
-                <td> @Html.DisplayFor(modelItem => item.Ambientes) </td>
+                <td class="text-center"> @Html.DisplayFor(modelItem => item.Ambientes) </td>
                 <td> @Html.DisplayFor(modelItem => item.Precio) </td>
                 @*<td> @Html.DisplayFor(modelItem => item.UsoInmueble.Nombre) </td>*@
                 <td> @Html.DisplayFor(modelItem => item.TipoInmueble.Nombre) </td>
-                <td> @Html.DisplayFor(modelItem => item.Disponible) </td>
+                <td class="text-center">
+                    @*@Html.DisplayFor(modelItem => item.Disponible)*@
+                    @if (item.Disponible)
+                    {
+                        <i class="far fa-check-circle text-success"></i>
+                    }
+                </td>
                 <td>
                     <a asp-controller="Inmueble" asp-action="getByPropietario" asp-route-id="@item.PropietarioId" title="Mis Propiedades">
                         @Html.DisplayFor(modelItem => item.Propietario.Persona.Apellido)

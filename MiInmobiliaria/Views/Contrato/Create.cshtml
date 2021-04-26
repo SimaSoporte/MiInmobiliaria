@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Crear";
+    Inmueble inmueble = (Inmueble)ViewBag.Inmueble;
 }
 
 <div class="row align-items-baseline">
@@ -23,29 +24,37 @@
                     </div>
                 </div>
             </div>
-            @*<div class="form-group">
-            <div class="row">
-                <div class="col-3"><label asp-for="InmuebleId" class="control-label"></label></div>
-                <div class="col-9">
-                    <input asp-for="InmuebleId" class="form-control" />
-                    <span asp-validation-for="InmuebleId" class="text-danger"></span>
-                </div>
-            </div>
-        </div>*@
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-3"><label class="control-label">Inmueble</label></div>
-                    <div class="col-9">
-                        <select class="form-control" name="InmuebleId">
-                            @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
-                            {
-                                @:<option value="@item.Id">@(item.Direccion) - Ambts: @(item.Ambientes) $@(item.Precio)</option>
-                            }
-                        </select>
-                        <span asp-validation-for="InmuebleId" class="text-danger"></span>
+            @if ( inmueble != null )
+            {
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-3"><label asp-for="Inmueble" class="control-label"></label></div>
+                        <div class="col-9 form-control">
+                            @*<input asp-for="InmuebleId" class="form-control" />*@
+                            <label>Inmueble: @inmueble.Id - @inmueble.Direccion  </label>
+                            <span asp-validation-for="Inmueble" class="text-danger"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-3"><label class="control-label">Inmueble</label></div>
+                        <div class="col-9">
+                            <select class="form-control" name="InmuebleId">
+                                @foreach (var item in (IList<Inmueble>)ViewBag.Inmuebles)
+                                {
+                                    @:<option value="@item.Id">@(item.Direccion) - Ambts: @(item.Ambientes) $@(item.Precio)</option>
+                                }
+                            </select>
+                            <span asp-validation-for="InmuebleId" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            }
+
 
             @*<div class="form-group">
             <div class="row">
@@ -72,14 +81,14 @@
             </div>
 
             @*<div class="form-group">
-                <div class="row">
-                    <div class="col-3"><label asp-for="GaranteId" class="control-label"></label></div>
-                    <div class="col-9">
-                        <input asp-for="GaranteId" class="form-control" />
-                        <span asp-validation-for="GaranteId" class="text-danger"></span>
-                    </div>
+            <div class="row">
+                <div class="col-3"><label asp-for="GaranteId" class="control-label"></label></div>
+                <div class="col-9">
+                    <input asp-for="GaranteId" class="form-control" />
+                    <span asp-validation-for="GaranteId" class="text-danger"></span>
                 </div>
-            </div>*@
+            </div>
+        </div>*@
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label class="control-label">Garante</label></div>
@@ -99,7 +108,7 @@
                 <div class="row">
                     <div class="col-3"><label asp-for="Desde" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Desde" class="form-control" />
+                        <input asp-for="Desde" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="Desde" class="text-danger"></span>
                     </div>
                 </div>
@@ -108,7 +117,7 @@
                 <div class="row">
                     <div class="col-3"><label asp-for="Hasta" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Hasta" class="form-control" />
+                        <input asp-for="Hasta" class="form-control" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="Hasta" class="text-danger"></span>
                     </div>
                 </div>
@@ -124,7 +133,7 @@
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" /> │ <a asp-action="Index">Volver a la Lista</a>
+                <input type="submit" value="Crear" class="btn btn-primary" /> │ <a asp-action="Index">Volver a la Lista</a>
             </div>
         </form>
     </div>

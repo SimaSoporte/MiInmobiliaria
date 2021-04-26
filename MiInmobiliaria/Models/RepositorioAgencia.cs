@@ -90,6 +90,7 @@ namespace MiInmobiliaria.Models
                         agencia = new Agencia
                         {
                             Id = reader.GetInt32(0),
+                            PersonaId = reader.GetInt32(1),
                             Persona = new Persona()
                             {
                                 Id = reader.GetInt32(1),
@@ -134,6 +135,7 @@ namespace MiInmobiliaria.Models
                         agencia = new Agencia
                         {
                             Id = reader.GetInt32(0),
+                            PersonaId = reader.GetInt32(1),
                             Persona = new Persona()
                             {
                                 Id = reader.GetInt32(1),

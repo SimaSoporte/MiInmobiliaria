@@ -71,7 +71,13 @@
                 }
                 @Html.DisplayNameFor(model => model.Propietario)
             </th>
-            <th> @Html.DisplayNameFor(model => model.Agencia) </th>
+            <th>
+                @if ((Boolean)ViewBag.filtroAgencia)
+                {
+                    <i class="fas fa-filter text-danger"></i>
+                }
+                @Html.DisplayNameFor(model => model.Agencia)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -97,7 +103,11 @@
                         @Html.DisplayFor(modelItem => item.Propietario.Persona.Apellido)
                     </a>
                 </td>
-                <td> @Html.DisplayFor(modelItem => item.Agencia.Persona.Apellido) </td>
+                <td>
+                    <a asp-controller="Inmueble" asp-action="getByAgencia" asp-route-id="@item.AgenciaId" title="Mis propiedades" class="text-primary">
+                        @Html.DisplayFor(modelItem => item.Agencia.Persona.Apellido)
+                    </a>
+                </td>
                 <td>
                     @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                         @Html.ActionLink("Details", "Details", new { id=item.Id }) |

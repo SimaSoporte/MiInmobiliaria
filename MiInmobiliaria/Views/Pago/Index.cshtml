@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Pagos";
+    Contrato contrato = (Contrato)ViewBag.Contrato;
 }
 
 <div class="row align-items-baseline">
@@ -12,6 +13,19 @@
         <p class="btn btn-outline-primary disabled"> <a asp-action="Create" hidden> <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
     </div>
 </div>
+
+
+@if ((Boolean)ViewBag.filtroContrato)
+{
+    <div class="row align-items-baseline">
+        <div class="col">
+            <i class="fas fa-filter text-danger"></i> Contrato: @contrato.Id - @contrato.Inmueble.Direccion - @contrato.Inquilino.Persona.Apellido @contrato.Inquilino.Persona.Nombre - @contrato.Garante.Persona.Apellido @contrato.Garante.Persona.Nombre
+        </div>
+    </div>
+    <br />
+}
+
+
 
 <table class="table">
     <thead>
@@ -41,40 +55,41 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Numero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Direccion) - Ambientes @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Ambientes)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Persona.Apellido) @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Persona.Nombre)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Fecha)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Importe)
-            </td>
-            <td hidden>
-                @Html.DisplayFor(modelItem => item.ContratoId)
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero) - @Html.DisplayFor(modelItem => item.Contrato.CantidadMeses)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Direccion) - Ambientes @Html.DisplayFor(modelItem => item.Contrato.Inmueble.Ambientes)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Persona.Apellido) @Html.DisplayFor(modelItem => item.Contrato.Inquilino.Persona.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fecha)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Importe)
+                </td>
+                <td hidden>
+                    @Html.DisplayFor(modelItem => item.ContratoId)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
 
-                <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
-                <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
-                <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" title="Editar" class="text-warning"><i class="far fa-edit"></i></a> │
+                    <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
+                    <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a>
 
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

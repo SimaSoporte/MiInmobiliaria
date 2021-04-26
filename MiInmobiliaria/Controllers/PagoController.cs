@@ -28,6 +28,10 @@ namespace MiInmobiliaria.Controllers
         public ActionResult Index()
         {
             var lista = repositorio.getAll();
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+            ViewBag.filtroContrato = false;
             return View(lista);
         }
 
@@ -59,6 +63,7 @@ namespace MiInmobiliaria.Controllers
                 e.ContratoId = e.Id;
                 e.Id = 0;
                 repositorio.Create(e);
+                TempData["Success"] = "Pago registrado con éxito.";
                 return RedirectToAction(nameof(Index));
             }
             catch (SqlException ex)
@@ -75,12 +80,19 @@ namespace MiInmobiliaria.Controllers
 
         public ActionResult RegistrarPago(int Id)
         {
-            ViewBag.Contrato = repositorioContrato.getById(Id);
+            var e = repositorioContrato.getById(Id);
+            ViewBag.numeroUltimoPago = repositorio.numeroUltimoPago(Id);
+            ViewBag.Contrato = e;
             return View("Create");
         }
 
+
+
         public ActionResult VerPagos(int Id)
         {
+            var e = repositorioContrato.getById(Id);
+            ViewBag.filtroContrato = true;
+            ViewBag.Contrato = e;
             var lista = repositorio.getAll(Id);
             return View("Index", lista);
         }

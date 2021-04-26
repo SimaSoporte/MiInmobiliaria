@@ -13,23 +13,49 @@ namespace MiInmobiliaria.Models
         {
         }
 
-        //ALTER TABLE Persona
-        //ADD CONSTRAINT fk_PersonaTipoPersonaId FOREIGN KEY(TipoPersonaId) REFERENCES TipoPersona(Id);
+        /*
+                ALTER TABLE Persona
+                ADD CONSTRAINT fk_PersonaTipoPersonaId FOREIGN KEY(TipoPersonaId) REFERENCES TipoPersona(Id);
 
-        //ALTER TABLE Agencia
-        //ADD CONSTRAINT fk_AgenciaPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+                ALTER TABLE Agencia
+                ADD CONSTRAINT fk_AgenciaPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
 
-        //ALTER TABLE Propietario
-        //ADD CONSTRAINT fk_PropietarioPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+                ALTER TABLE Propietario
+                ADD CONSTRAINT fk_PropietarioPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
 
-        //ALTER TABLE Inquilino
-        //ADD CONSTRAINT fk_InquilinoPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+                ALTER TABLE Inquilino
+                ADD CONSTRAINT fk_InquilinoPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
 
-        //ALTER TABLE Garante
-        //ADD CONSTRAINT fk_GarantePersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+                ALTER TABLE Garante
+                ADD CONSTRAINT fk_GarantePersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
 
-        //ALTER TABLE Usuario
-        //ADD CONSTRAINT fk_UsuarioPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+                ALTER TABLE Usuario
+                ADD CONSTRAINT fk_UsuarioPersonaId FOREIGN KEY(PersonaId) REFERENCES Persona(Id);
+
+                ALTER TABLE Inmueble
+                ADD CONSTRAINT fk_InmueblePropietarioId FOREIGN KEY(PropietarioId) REFERENCES Propietario(Id);
+
+                ALTER TABLE Inmueble
+                ADD CONSTRAINT fk_InmuebleAgenciaId FOREIGN KEY(AgenciaId) REFERENCES Agencia(Id);
+
+                ALTER TABLE Inmueble
+                ADD CONSTRAINT fk_InmuebleTipoInmuebleId FOREIGN KEY(TipoInmuebleId) REFERENCES TipoInmueble(Id);
+
+                ALTER TABLE Inmueble
+                ADD CONSTRAINT fk_InmuebleUsoInmuebleId FOREIGN KEY(UsoInmuebleId) REFERENCES UsoInmueble(Id);
+
+                ALTER TABLE Contrato
+                ADD CONSTRAINT fk_ContratoInmuebleId FOREIGN KEY(InmuebleId) REFERENCES Inmueble(Id);
+
+                ALTER TABLE Contrato
+                ADD CONSTRAINT fk_ContratoInquilinoId FOREIGN KEY(InquilinoId) REFERENCES Inquilino(Id);
+
+                ALTER TABLE Contrato
+                ADD CONSTRAINT fk_ContratoGaranteId FOREIGN KEY(GaranteId) REFERENCES Garante(Id);
+
+                ALTER TABLE Pago
+                ADD CONSTRAINT fk_PagoContratoId FOREIGN KEY(ContratoId) REFERENCES Contrato(Id);
+        */
 
         //exec sp_fkeys 'TipoPersona';
 

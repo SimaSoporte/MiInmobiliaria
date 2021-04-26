@@ -45,7 +45,9 @@
                     <a asp-action="Details" asp-route-id="@item.Id" title="Detalle"><i class="fas fa-bars"></i></a> │
                     <a asp-action="Delete" asp-route-id="@item.Id" title="Borrar" class="text-danger"><i class="far fa-trash-alt"></i></a> │
 
-                    @Html.ActionLink("Mis Propiedades", "getByPropietario", "Inmueble", new { id = item.Id })
+                    <a asp-controller="Inmueble" asp-action="getByPropietario" asp-route-id="@item.Id" title="Mis propiedades" class="text-secondary"> <i class="fas fa-home"></i> </a>
+
+                    @*@Html.ActionLink("Mis Propiedades", "getByPropietario", "Inmueble", new { id = item.Id })*@
                 </td>
             </tr>
         }

@@ -9,8 +9,10 @@ namespace MiInmobiliaria.Models
 {
     public class RepositorioPago : RepositorioBase, IRepositorioPago
     {
+        private readonly RepositorioContrato repositorioContrato;
         public RepositorioPago(IConfiguration configuration) : base(configuration)
         {
+            this.repositorioContrato = new RepositorioContrato(configuration);
         }
         public int Create(Pago e)
         {
@@ -101,6 +103,7 @@ namespace MiInmobiliaria.Models
                                 Id = reader.GetInt32(4),
                                 Desde = reader.GetDateTime(5),
                                 Hasta = reader.GetDateTime(6),
+                                CantidadMeses = repositorioContrato.cantidadMeses(reader.GetDateTime(5), reader.GetDateTime(6)),
                                 Precio = reader.GetDecimal(7),
                                 InquilinoId = reader.GetInt32(8),
                                 Inquilino = new Inquilino
@@ -160,6 +163,7 @@ namespace MiInmobiliaria.Models
                                 Id = reader.GetInt32(4),
                                 Desde = reader.GetDateTime(5),
                                 Hasta = reader.GetDateTime(6),
+                                CantidadMeses = repositorioContrato.cantidadMeses(reader.GetDateTime(5), reader.GetDateTime(6)),
                                 Precio = reader.GetDecimal(7),
                                 InquilinoId = reader.GetInt32(8),
                                 Inquilino = new Inquilino
@@ -216,6 +220,7 @@ namespace MiInmobiliaria.Models
                                 Id = reader.GetInt32(4),
                                 Desde = reader.GetDateTime(5),
                                 Hasta = reader.GetDateTime(6),
+                                CantidadMeses = repositorioContrato.cantidadMeses(reader.GetDateTime(5), reader.GetDateTime(6)),
                                 Precio = reader.GetDecimal(7),
                                 InquilinoId = reader.GetInt32(8),
                                 Inquilino = new Inquilino
@@ -242,6 +247,32 @@ namespace MiInmobiliaria.Models
                 }
             }
             return e;
+        }
+
+
+        public int numeroUltimoPago(int ContratoId)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT IsNull(MAX(numero),0) FROM Pago WHERE ContratoId = @ContratoId";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@ContratoId", ContratoId);
+                    con.Open();
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+        public int numeroTotalPagos(Contrato e)
+        {
+            int res = -1;
+            TimeSpan difFechas = e.Hasta - e.Desde;
+            res = (int)( difFechas.Days / 30 < 1 ? 1 : difFechas.Days / 30 );
+            return res;
         }
     }
 }

@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Crear";
     Contrato contrato = (Contrato)ViewBag.Contrato;
+    int numero = (int)ViewBag.numeroUltimoPago + 1;
 }
 
 <div class="row align-items-baseline">
@@ -54,7 +55,7 @@
                 <div class="row">
                     <div class="col-3"> <label asp-for="Numero" class="control-label"></label> </div>
                     <div class="col-9">
-                        <input asp-for="Numero" class="form-control" autofocus />
+                        <input asp-for="Numero" class="form-control" value="@numero" autofocus />
                         <span asp-validation-for="Numero" class="text-danger"></span>
                     </div>
                 </div>
@@ -63,7 +64,7 @@
                 <div class="row">
                     <div class="col-3"> <label asp-for="Fecha" class="control-label"></label> </div>
                     <div class="col-9">
-                        <input asp-for="Fecha" class="form-control" />
+                        <input asp-for="Fecha" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
                         <span asp-validation-for="Fecha" class="text-danger"></span>
                     </div>
                 </div>

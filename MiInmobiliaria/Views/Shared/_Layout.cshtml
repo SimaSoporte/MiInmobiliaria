@@ -26,7 +26,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MiInmobiliaria</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"> <i class="fas fa-home"></i> MiInmobiliaria</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -37,10 +37,10 @@
                         @if (!User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"><i class="fas fa-home"></i> Home</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index"> </a>
                             </li>
                             <li class="nav-item float-right">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login"><i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Login"> <i class="fas fa-sign-in-alt"></i> Iniciar sesión</a>
                             </li>
                         }
                         else
@@ -52,6 +52,9 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Inmueble" asp-action="index">Inmuebles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Agencia" asp-action="index">Agencias</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Inquilino" asp-action="index">Inquilinos</a>
@@ -72,7 +75,6 @@
                                             <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="index"> <i class="fas fa-user-cog"></i> Personas</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="nav-link" asp-area="" asp-controller="Usuario" asp-action="index"> <i class="fas fa-user-cog"></i> Usuarios</a>
-                                            <a class="nav-link" asp-area="" asp-controller="Agencia" asp-action="index"> <i class="fas fa-user-cog"></i> Agencias</a>
                                             <a class="nav-link" asp-area="" asp-controller="Garante" asp-action="index"> <i class="fas fa-user-cog"></i> Garantes</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">TipoInmueble</a>
@@ -107,6 +109,28 @@
         <div class="container">
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <strong>Información:</strong> @ViewBag.Error
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    X
+                </button>
+            </div>
+        </div>
+    }
+    @if (!String.IsNullOrEmpty(@ViewBag.Warning))
+    {
+        <div class="container">
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Información:</strong> @ViewBag.Warning
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    X
+                </button>
+            </div>
+        </div>
+    }
+    @if (!String.IsNullOrEmpty(@ViewBag.Success))
+    {
+        <div class="container">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Información:</strong> @ViewBag.Success
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     X
                 </button>

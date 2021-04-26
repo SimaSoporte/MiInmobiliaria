@@ -42,6 +42,7 @@ namespace MiInmobiliaria.Controllers
             ViewBag.filtroDesocupado = false;
             ViewBag.filtroDisponible = false;
             ViewBag.filtroPropietario = false;
+            ViewBag.filtroAgencia = false;
             ViewData["Error"] = TempData["Error"];
             return View(lista);
         }
@@ -158,13 +159,13 @@ namespace MiInmobiliaria.Controllers
 
 
 
-
         public ActionResult getByDisponible()
         {
             var list = repositorio.getAllDisponible();
             ViewBag.filtroDesocupado = false;
             ViewBag.filtroDisponible = true;
             ViewBag.filtroPropietario = false;
+            ViewBag.filtroAgencia = false;
             return View("Index", list);
         }
 
@@ -176,13 +177,18 @@ namespace MiInmobiliaria.Controllers
             ViewBag.filtroDesocupado = false;
             ViewBag.filtroDisponible = false;
             ViewBag.filtroPropietario = true;
+            ViewBag.filtroAgencia = false;
             return View("Index", list);
         }
 
         public ActionResult getByAgencia(int id)
         {
-            var e = repositorioAgencia.getById(id);
-            var list = repositorio.getAll(e);
+            ViewBag.Agencia = repositorioAgencia.getById(id);
+            var list = repositorio.getAll((Agencia)ViewBag.Agencia);
+            ViewBag.filtroDesocupado = false;
+            ViewBag.filtroDisponible = false;
+            ViewBag.filtroPropietario = false;
+            ViewBag.filtroAgencia = true;
             return View("Index", list);
         }
 
@@ -195,6 +201,7 @@ namespace MiInmobiliaria.Controllers
                 ViewBag.filtroDesocupado = true;
                 ViewBag.filtroDisponible = false;
                 ViewBag.filtroPropietario = false;
+                ViewBag.filtroAgencia = false;
                 return View("Index", lista);
             } else
             {

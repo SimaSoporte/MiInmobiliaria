@@ -251,8 +251,7 @@ namespace MiInmobiliaria.Models
             var res = new List<Inmueble>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT * FROM vInmuebles " +
-                    $"WHERE (PropietarioId = @PropietarioId OR @PropietarioId = 0 ) ";
+                string sql = $"SELECT * FROM vInmuebles WHERE (AgenciaId = @AgenciaId OR @AgenciaId = 0 ) ";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
@@ -474,18 +473,19 @@ namespace MiInmobiliaria.Models
 
 
 
-        public Inmueble getDesocupado(DateTime desde, DateTime hasta, int id)
+        public Inmueble getDesocupado(DateTime desde, DateTime hasta, int InmuebleId)
         {
             Inmueble e = null;
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT * FROM vInmuebles " +
-                    $"WHERE Id = @id AND disponible = 1 AND Id IN " +
+                    $"WHERE Id = @InmuebleId AND disponible = 1 AND Id IN " +
                     $"( SELECT InmuebleId FROM Contrato " +
-                    $"      WHERE (desde > @hasta OR  hasta < @desde) AND InmuebleId = @id )";
+                    $"      WHERE (desde > @hasta OR  hasta < @desde) AND InmuebleId = @InmuebleId )";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {
+                    cmd.Parameters.AddWithValue("@InmuebleId", InmuebleId);
                     cmd.Parameters.AddWithValue("@desde", desde);
                     cmd.Parameters.AddWithValue("@hasta", hasta);
                     con.Open();

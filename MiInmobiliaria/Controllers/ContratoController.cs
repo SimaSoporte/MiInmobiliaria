@@ -40,6 +40,8 @@ namespace MiInmobiliaria.Controllers
             ViewBag.filtroVigente = false;
             ViewBag.filtroInmueble = false;
             ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
             return View(lista);
         }
 
@@ -55,9 +57,14 @@ namespace MiInmobiliaria.Controllers
 
 
         // GET: ContratoController/Create
-        public ActionResult Create()
+        public ActionResult Create(int Id)
         {
-            ViewBag.Inmuebles = repositorioInmueble.getAll();
+            if (Id != 0) {
+                ViewBag.Inmueble = repositorioInmueble.getById(Id);
+            } else
+            {
+                ViewBag.Inmuebles = repositorioInmueble.getAll();
+            }
             ViewBag.Inquilinos = repositorioInquilino.getAll();
             ViewBag.Garantes = repositorioGarante.getAll();
             return View();
@@ -70,9 +77,18 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                e.Precio = repositorioInmueble.getById(e.InmuebleId).Precio;
-                e.Id = repositorio.Create(e);
-                return RedirectToAction(nameof(Index));
+                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, e.InmuebleId) != null)
+                {
+                    e.Precio = repositorioInmueble.getById(e.InmuebleId).Precio;
+                    e.Id = repositorio.Create(e);
+                    TempData["Success"] = "Contrato creado con éxito.";
+                    return RedirectToAction(nameof(Index));
+                } else
+                {
+                    TempData["Error"] = "El inmueble NO esta desocupado entre las fechas seleccionadas. " + e.Desde + e.Hasta;
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
             catch (Exception ex)
             {
@@ -105,6 +121,7 @@ namespace MiInmobiliaria.Controllers
                 ViewBag.Inmuebles = repositorioInmueble.getAll();
                 ViewBag.Inquilinos = repositorioInquilino.getAll();
                 ViewBag.Garantes = repositorioGarante.getAll();
+                TempData["Success"] = "Contrato editado con éxito.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -130,11 +147,12 @@ namespace MiInmobiliaria.Controllers
             try
             {
                 repositorio.Delete(id);
+                TempData["Success"] = "Contrato borrado con éxito.";
                 return RedirectToAction(nameof(Index));
             }
             catch (SqlException ex)
             {
-                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el tipo Persona porque esta utilizado" : "Ocurrio un error.";
+                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el Contrato porque esta utilizado" : "Ocurrio un error.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -153,6 +171,9 @@ namespace MiInmobiliaria.Controllers
             ViewBag.filtroInmueble = false;
             return View("Index", lista);
         }
+
+
+
 
         // GET: ContratoController
         public ActionResult Renovar(int Id)
@@ -173,6 +194,9 @@ namespace MiInmobiliaria.Controllers
                 if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, Id) != null)
                 {
                     repositorio.Renovar(e);
+                    TempData["Success"] = "Contrato renovado con éxito.";
+                    ViewBag.filtroVigente = false;
+                    ViewBag.filtroInmueble = false;
                 }
                 else
                 {
@@ -191,6 +215,7 @@ namespace MiInmobiliaria.Controllers
 
 
 
+
         // GET: ContratoController
         public ActionResult getByInmueble(int Id)
         {
@@ -203,6 +228,7 @@ namespace MiInmobiliaria.Controllers
         }
 
 
+
         // GET: ContratoController/Edit/5
         public ActionResult Cancelar(int id)
         {
@@ -213,9 +239,19 @@ namespace MiInmobiliaria.Controllers
         [HttpPost]
         public ActionResult Cancelar(int id, Contrato e)
         {
-
-            //var e = repositorio.getById(id);
-            return View();
+            decimal multa;
+            TimeSpan difFechas = e.Hasta - e.Desde;
+            var contrato = repositorio.getById(id);
+            TimeSpan difContrato = contrato.Hasta - contrato.Desde;
+            if (difFechas.Days < difContrato.Days /2  )
+                multa = contrato.Precio * 2;
+            else
+                multa = contrato.Precio;
+            TempData["Warning"] = "Por la cancelación anticipada del contato, debe abonar una multa de $ " + multa;
+            ViewBag.filtroVigente = false;
+            ViewBag.filtroInmueble = false;
+            repositorio.Edit(e);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

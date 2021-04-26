@@ -155,6 +155,7 @@ namespace MiInmobiliaria.Models
                             },
                             Desde = reader.GetDateTime(12),
                             Hasta = reader.GetDateTime(13),
+                            CantidadMeses = cantidadMeses(reader.GetDateTime(12), reader.GetDateTime(13)),
                             Precio = reader.GetDecimal(14)
                         };
                         res.Add(e);
@@ -213,6 +214,7 @@ namespace MiInmobiliaria.Models
                             },
                             Desde = reader.GetDateTime(12),
                             Hasta = reader.GetDateTime(13),
+                            CantidadMeses = cantidadMeses(reader.GetDateTime(12), reader.GetDateTime(13)),
                             Precio = reader.GetDecimal(14)
                         };
                         res.Add(e);
@@ -272,6 +274,7 @@ namespace MiInmobiliaria.Models
                             },
                             Desde = reader.GetDateTime(12),
                             Hasta = reader.GetDateTime(13),
+                            CantidadMeses = cantidadMeses(reader.GetDateTime(12), reader.GetDateTime(13)),
                             Precio = reader.GetDecimal(14)
                         };
                         res.Add(e);
@@ -332,6 +335,7 @@ namespace MiInmobiliaria.Models
                             },
                             Desde = reader.GetDateTime(12),
                             Hasta = reader.GetDateTime(13),
+                            CantidadMeses = cantidadMeses(reader.GetDateTime(12), reader.GetDateTime(13)),
                             Precio = reader.GetDecimal(14)
                         };
                     }
@@ -346,6 +350,15 @@ namespace MiInmobiliaria.Models
             decimal importe = 0;
 
             return importe;
+        }
+
+        public int cantidadMeses(DateTime desde, DateTime hasta)
+        {
+            int res = -1;
+            TimeSpan difFechas = hasta - desde;
+            int dias = difFechas.Days;
+            res = (dias / 30) < 1 ? 1 : (int)(dias / 30);
+            return res;
         }
 
     }

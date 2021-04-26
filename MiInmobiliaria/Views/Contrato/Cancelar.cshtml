@@ -12,7 +12,7 @@
 <hr />
 <div class="row">
     <div class="col-11 col-sm-10 col-md-8 col-lg-6 col-xl-5">
-        <form asp-action="Cancelar">
+        <form asp-action="Cancelar" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group" hidden>
                 <div class="row">
@@ -94,7 +94,7 @@
                 <div class="row">
                     <div class="col-3"><label asp-for="Hasta" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Hasta" class="form-control" autofocus />
+                        <input asp-for="Hasta" class="form-control"  max='@Html.ValueFor(Model => Model.Hasta, "{0:yyyy-MM-dd}")' autofocus />
                         <span asp-validation-for="Hasta" class="text-danger"></span>
                     </div>
                 </div>

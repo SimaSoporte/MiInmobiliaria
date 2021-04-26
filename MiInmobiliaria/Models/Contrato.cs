@@ -24,6 +24,7 @@ namespace MiInmobiliaria.Models
         public DateTime Desde { get; set; }
         [DataType(DataType.Date)]
         public DateTime Hasta { get; set; }
+        public int CantidadMeses { get; set; }
         public decimal Precio { get; set; }
     }
 }

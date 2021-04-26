@@ -322,7 +322,7 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
-        public IList<Inmueble> getAllDisponible()
+        public IList<Inmueble> getAllDisponibles()
         {
             var res = new List<Inmueble>();
             using (SqlConnection con = new SqlConnection(connectionString))
@@ -559,7 +559,11 @@ namespace MiInmobiliaria.Models
                 string sql = $"SELECT * FROM vInmuebles " +
                     $"WHERE disponible = 1 AND Id IN " +
                     $"( SELECT InmuebleId FROM Contrato " +
-                    $"      WHERE desde > @hasta OR  hasta < @desde )";
+                    $"      WHERE desde > @hasta OR  hasta < @desde ) " +
+                    $"UNION " +
+                    $"SELECT* FROM vInmuebles " +
+                    $"  WHERE disponible = 1 AND Id NOT IN " +
+                    $"      (SELECT InmuebleId FROM Contrato)";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {

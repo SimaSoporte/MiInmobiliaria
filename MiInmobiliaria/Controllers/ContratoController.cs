@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -60,10 +61,15 @@ namespace MiInmobiliaria.Controllers
         public ActionResult Create(int Id)
         {
             if (Id != 0) {
-                ViewBag.Inmueble = repositorioInmueble.getById(Id);
+                var e = repositorioInmueble.getById(Id);
+                if ( !e.Disponible ) {
+                    TempData["Error"] = "El inmueble seleccioando NO esta disponible.";
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewBag.Inmueble = e;
             } else
             {
-                ViewBag.Inmuebles = repositorioInmueble.getAll();
+                ViewBag.Inmuebles = repositorioInmueble.getAllDisponibles();
             }
             ViewBag.Inquilinos = repositorioInquilino.getAll();
             ViewBag.Garantes = repositorioGarante.getAll();
@@ -131,13 +137,16 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
+        [Authorize(Policy = "Administrador")]
         // GET: ContratoController/Delete/5
         public ActionResult Delete(int id)
         {
             var e = repositorio.getById(id);
             return View(e);
         }
-
+        [Authorize(Policy = "Administrador")]
         // POST: ContratoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

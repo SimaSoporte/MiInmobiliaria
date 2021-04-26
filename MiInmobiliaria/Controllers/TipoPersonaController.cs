@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
@@ -84,13 +85,16 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
+        [Authorize(Policy = "Administrador")]
         // GET: TipoPersonaController/Delete/5
         public ActionResult Delete(int id)
         {
             var e = repositorio.Obtener(id);
             return View(e);
         }
-
+        [Authorize(Policy = "Administrador")]
         // POST: TipoPersonaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

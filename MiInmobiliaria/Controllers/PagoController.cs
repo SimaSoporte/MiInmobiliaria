@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MiInmobiliaria.Models;
@@ -132,6 +133,8 @@ namespace MiInmobiliaria.Controllers
 
 
 
+
+        [Authorize(Policy = "Administrador")]
         // GET: PagoController/Delete/5
         public ActionResult Delete(int id)
         {
@@ -139,7 +142,7 @@ namespace MiInmobiliaria.Controllers
             ViewBag.Contrato = repositorioContrato.getById(e.ContratoId);
             return View(e);
         }
-
+        [Authorize(Policy = "Administrador")]
         // POST: PagoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

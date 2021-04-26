@@ -45,7 +45,7 @@
                         }
                         else
                         {
-                            @if (User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador"))
+                            @if (User.IsInRole("Empleado") || User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador"))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Propietario" asp-action="index">Propietarios</a>
@@ -71,14 +71,14 @@
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Configuracion</a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoPersona" asp-action="index">TipoPersona</a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoPersona" asp-action="index">Tipos de Persona</a>
                                             <a class="nav-link" asp-area="" asp-controller="Persona" asp-action="index"> <i class="fas fa-user-cog"></i> Personas</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="nav-link" asp-area="" asp-controller="Usuario" asp-action="index"> <i class="fas fa-user-cog"></i> Usuarios</a>
                                             <a class="nav-link" asp-area="" asp-controller="Garante" asp-action="index"> <i class="fas fa-user-cog"></i> Garantes</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">TipoInmueble</a>
-                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="UsoInmueble" asp-action="index">UsoInmueble</a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="TipoInmueble" asp-action="index">Tipos de Inmueble</a>
+                                            <a class="dropdown-item text-dark" asp-area="" asp-controller="UsoInmueble" asp-action="index">Usos de Inmueble</a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                                         </div>

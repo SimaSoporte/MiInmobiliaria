@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -120,13 +121,16 @@ namespace MiInmobiliaria.Controllers
             }
         }
 
+
+
+        [Authorize(Policy = "Administrador")]
         // GET: PersonaController/Delete/5
         public ActionResult Delete(int id)
         {
             var e = repositorio.getById(id);
             return View(e);
         }
-
+        [Authorize(Policy = "Administrador")]
         // POST: PersonaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

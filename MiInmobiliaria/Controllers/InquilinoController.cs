@@ -51,7 +51,7 @@ namespace MiInmobiliaria.Controllers
         // GET: PropietarioController/Create
         public ActionResult Create()
         {
-            ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
+            ViewBag.items = repositorioTipoPersona.getAll();
             return View();
         }
 
@@ -96,7 +96,7 @@ namespace MiInmobiliaria.Controllers
         // GET: PropietarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewBag.TipoPersona = repositorioTipoPersona.Listar();
+            ViewBag.TipoPersona = repositorioTipoPersona.getAll();
             var e = repositorio.getById(id);
             return View(e);
         }

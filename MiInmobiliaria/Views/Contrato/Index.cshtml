@@ -6,12 +6,12 @@
 }
 
 <div class="row align-items-baseline">
-    <div class="col-3">
-        <h3>Lista de Contratos</h3>
+    <div class="col">
+        <a asp-area="" asp-controller="Contrato" asp-action="index"> <h4>Lista de Contratos</h4> </a>
     </div>
 
-    <div class="col text-right">
-        <p class="btn btn-outline-primary">
+    <div class="col text-center">
+        <div class="btn btn-outline-primary">
             <a asp-action="Vigentes">
                 @if ((Boolean)ViewBag.filtroVigente)
                 {
@@ -23,17 +23,19 @@
                 }
                 Vigentes
             </a>
-        </p>
+        </div>
     </div>
     <div class="col text-right">
-        @if ((Boolean)ViewBag.filtroInmueble)
-        {
-            <p class="btn btn-outline-primary"> <a asp-action="Create" asp-route-id="@inmueble.Id"> <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
-        }
-        else
-        {
-            <p class="btn btn-outline-primary"> <a asp-action="Create" > <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
-        }
+        <div class="btn btn-outline-primary">
+            @if ((Boolean)ViewBag.filtroInmueble)
+            {
+                <a asp-action="Create" asp-route-id="@inmueble.Id"> <i class="fa fa-plus"></i> Crear Nuevo</a>
+            }
+            else
+            {
+                <a asp-action="Create"> <i class="fa fa-plus"></i> Crear Nuevo</a>
+            }
+        </div>
     </div>
 </div>
 

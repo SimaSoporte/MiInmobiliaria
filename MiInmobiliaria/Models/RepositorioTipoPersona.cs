@@ -15,7 +15,7 @@ namespace MiInmobiliaria.Models
         {
         }
 
-        public List<TipoPersona> Listar() {
+        public IList<TipoPersona> getAll() {
             var res = new List<TipoPersona>();
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -51,21 +51,21 @@ namespace MiInmobiliaria.Models
         /// Retorna una List<SelectListItem> para poder llenar un DropDownList
         /// </summary>
         /// <returns></returns>
-        public List<SelectListItem> ListarSelectListItem()
-        {
-            List<TipoPersona> lst = Listar();
+        //public List<SelectListItem> ListarSelectListItem()
+        //{
+        //    List<TipoPersona> lst = Listar();
 
-            List<SelectListItem> items = lst.ConvertAll(d =>
-            {
-                return new SelectListItem()
-                {
-                    Text = d.Nombre.ToString(),
-                    Value = d.Id.ToString()
-                };
-            });
+        //    List<SelectListItem> items = lst.ConvertAll(d =>
+        //    {
+        //        return new SelectListItem()
+        //        {
+        //            Text = d.Nombre.ToString(),
+        //            Value = d.Id.ToString()
+        //        };
+        //    });
 
-            return items;
-        }
+        //    return items;
+        //}
 
         public TipoPersona Obtener(int id)
         {

@@ -35,7 +35,7 @@ namespace MiInmobiliaria.Controllers
             this.utils = new Utils(configuration, environment);
         }
 
-                
+
         // GET: Usuarios/Login/
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
@@ -121,10 +121,18 @@ namespace MiInmobiliaria.Controllers
         // GET: UsuarioController/Create
         public ActionResult Create()
         {
-            //ViewBag.items = repositorioTipoPersona.ListarSelectListItem();
-            ViewBag.tipoPersona = repositorioTipoPersona.Listar();
-            ViewBag.Roles = Persona.ObtenerRoles();
-            return View();
+            try
+            {
+                ViewBag.TiposPersona = repositorioTipoPersona.getAll();
+                ViewBag.Roles = Persona.ObtenerRoles();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
+            }
+
         }
 
         [Authorize(Policy = "Administrador")]
@@ -133,40 +141,35 @@ namespace MiInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Usuario e)
         {
-            //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
-            //e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Empleado")).Key;
-
             try
             {
                 Persona p = repositorioPersona.getByDniEmail(e.Persona.Dni, e.Persona.Email);
                 if (p != null)
-                {
                     e.Persona = p;
-                    e.PersonaId = p.Id;
-                } else
+                else
                 {
-                    e.PersonaId = repositorioPersona.Create(e.Persona);
+                    e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
+                    e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
+                    e.Persona.Password = utils.getPasswordHashed(e.Persona.Password);
+                    e.Persona.Rol = (User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador")) ? e.Persona.Rol : (int)enRoles.Empleado;
+                    e.Persona.Avatar = "";
+                    e.Persona.Id = repositorioPersona.Create(e.Persona);
+                    if (e.Persona.AvatarFile != null)
+                    {
+                        e.Persona.Avatar = utils.uploadFile(e.Persona);
+                    }
+                    repositorioPersona.Edit(e.Persona);
                 }
+
+
                 e.Activo = true;
                 repositorio.Create(e);
-
-                // Actualizar datos de Persona
-                //e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
-                //e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
-                e.Persona.Password = utils.getPasswordHashed(e.Persona.Password);
-                e.Persona.Rol = (User.IsInRole("Administrador") || User.IsInRole("SuperAdministrador")) ? e.Persona.Rol : (int)enRoles.Empleado;
-                e.Persona.Avatar = "";
-                if (e.Persona.AvatarFile != null)
-                {
-                    e.Persona.Avatar = utils.uploadFile(e.Persona);
-                }
-                repositorioPersona.Edit(p);
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
                 TempData["Error"] = "Ocurrio un error." + ex.ToString();
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -177,7 +180,7 @@ namespace MiInmobiliaria.Controllers
         [Authorize]
         public ActionResult Perfil()
         {
-            ViewBag.TiposPersona = repositorioTipoPersona.Listar();
+            ViewBag.TiposPersona = repositorioTipoPersona.getAll();
             ViewData["Title"] = "Mi perfil";
             var u = repositorio.getByEmail(User.Identity.Name);
             ViewBag.Roles = Persona.ObtenerRoles();
@@ -189,7 +192,7 @@ namespace MiInmobiliaria.Controllers
         // GET: UsuarioController/Edit/5
         public ActionResult Edit(int id)
         {
-            ViewBag.TiposPersona = repositorioTipoPersona.Listar();
+            ViewBag.TiposPersona = repositorioTipoPersona.getAll();
             ViewBag.Roles = Persona.ObtenerRoles();
             var e = repositorio.getById(id);
             return View(e);

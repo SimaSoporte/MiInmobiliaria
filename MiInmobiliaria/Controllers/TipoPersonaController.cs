@@ -25,7 +25,7 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController
         public ActionResult Index()
         {
-            var lista = repositorio.Listar();
+            var lista = repositorio.getAll();
             ViewData[nameof(TipoPersona)] = lista;
             ViewData["Title"] = nameof(TipoPersona);
             ViewData["Error"] = TempData["Error"];

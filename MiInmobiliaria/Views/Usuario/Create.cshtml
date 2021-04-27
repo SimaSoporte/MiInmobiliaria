@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Crear Usuario nuevo";
-    List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
 }
 
 <div class="row align-items-baseline">
@@ -20,7 +19,7 @@
                     <input asp-for="Id" class="form-control" />
                     <span asp-validation-for="Id" class="text-danger"></span>
                 </div>*@
-            <div class="form-group" hidden>
+            @*<div class="form-group" hidden>
                 <div class="row">
                     <div class="col-3"><label asp-for="PersonaId" class="control-label"></label></div>
                     <div class="col-9">
@@ -28,20 +27,19 @@
                         <span asp-validation-for="PersonaId" class="text-danger"></span>
                     </div>
                 </div>
-            </div>
+            </div>*@
 
             <div class="form-group">
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
                     <div class="col-9">
-                        @*<select class="form-control" name="TipoPersonaId">*@
-                        <select class="form-control" name="Persona.TipoPersona.Id">
-                            @foreach (var tp in (List<TipoPersona>)ViewBag.tipoPersona)
+                        <select class="form-control" name="Persona.TipoPersonaId">
+                            @foreach (var item in (IList<TipoPersona>)ViewBag.TiposPersona)
                             {
-                                @:<option value="@tp.Id">@(tp.Nombre)</option>
+                                @:<option value="@item.Id">@(item.Nombre)</option>
                             }
                         </select>
-                        <span asp-validation-for="Persona.TipoPersona.Id" class="text-danger"></span>
+                        <span asp-validation-for="Persona.TipoPersonaId" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -86,7 +84,7 @@
                 <div class="row">
                     <div class="col-3"><label asp-for="Persona.Telefono" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Persona.Telefono" class="form-control" type="tel" />
+                        <input asp-for="Persona.Telefono" class="form-control" />
                         <span asp-validation-for="Persona.Telefono" class="text-danger"></span>
                     </div>
                 </div>

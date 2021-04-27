@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Crear Propietario nuevo";
-    List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
 }
 
 <div class="row align-items-baseline">
@@ -37,7 +36,12 @@
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
                     <div class="col-9">
-                        @Html.DropDownList("Persona.TipoPersona.Id", items, new { @class = "form-control" })
+                        <select class="form-control" name="Persona.TipoPersona.Id">
+                            @foreach (var item in (IList<TipoPersona>)ViewBag.TiposPersona)
+                            {
+                                @:<option value="@item.Id">@(item.Nombre)</option>
+                            }
+                        </select>
                     </div>
                 </div>
             </div>

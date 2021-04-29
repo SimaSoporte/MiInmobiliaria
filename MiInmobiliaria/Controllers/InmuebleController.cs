@@ -230,8 +230,6 @@ namespace MiInmobiliaria.Controllers
             var lista = repositorio.getAll();
             return View(lista);
         }
-
-
         [HttpPost]
         public ActionResult Busqueda(int UsoInmuebleId, int TipoInmuebleId, int ambientes, DateTime desde, DateTime hasta, decimal minimo, decimal maximo)
         {

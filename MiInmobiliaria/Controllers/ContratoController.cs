@@ -203,7 +203,7 @@ namespace MiInmobiliaria.Controllers
             ViewBag.filtroVigente = false;
             try
             {
-                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, Id) != null)
+                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, Id) == null)
                 {
                     repositorio.Renovar(e);
                     TempData["Success"] = "Contrato renovado con éxito.";
@@ -251,19 +251,27 @@ namespace MiInmobiliaria.Controllers
         [HttpPost]
         public ActionResult Cancelar(int id, Contrato e)
         {
-            decimal multa;
-            TimeSpan difFechas = e.Hasta - e.Desde;
-            var contrato = repositorio.getById(id);
-            TimeSpan difContrato = contrato.Hasta - contrato.Desde;
-            if (difFechas.Days < difContrato.Days /2  )
-                multa = contrato.Precio * 2;
-            else
-                multa = contrato.Precio;
-            TempData["Warning"] = "Por la cancelación anticipada del contato, debe abonar una multa de $ " + multa;
-            ViewBag.filtroVigente = false;
-            ViewBag.filtroInmueble = false;
-            repositorio.Edit(e);
-            return RedirectToAction(nameof(Index));
+            if (e.Desde <= e.Hasta && e.Hasta <= DateTime.Now)
+            {
+                decimal multa;
+                TimeSpan difFechas = e.Hasta - e.Desde;
+                var contrato = repositorio.getById(id);
+                TimeSpan difContrato = contrato.Hasta - contrato.Desde;
+                if (difFechas.Days < difContrato.Days / 2)
+                    multa = contrato.Precio * 2;
+                else
+                    multa = contrato.Precio;
+                TempData["Warning"] = "Por la cancelación anticipada del contato, debe abonar una multa de $ " + multa;
+                ViewBag.filtroVigente = false;
+                ViewBag.filtroInmueble = false;
+                repositorio.Edit(e);
+                return RedirectToAction(nameof(Index));
+            } else
+            {
+                TempData["Error"] = "Error en la fecha de cancelación del contrato.";
+                return RedirectToAction(nameof(Index));
+            }
+
         }
     }
 }

@@ -33,13 +33,13 @@
                 <div class="row">
                     <div class="col-3"><label>Tipo Persona</label></div>
                     <div class="col-9">
-                        <select class="form-control" name="Persona.TipoPersonaId">
+                        <select class="form-control" name="Persona.TipoPersona.Id">
                             @foreach (var item in (IList<TipoPersona>)ViewBag.TiposPersona)
                             {
                                 @:<option value="@item.Id">@(item.Nombre)</option>
                             }
                         </select>
-                        <span asp-validation-for="Persona.TipoPersonaId" class="text-danger"></span>
+                        <span asp-validation-for="Persona.TipoPersona.Id" class="text-danger"></span>
                     </div>
                 </div>
             </div>

@@ -28,10 +28,11 @@ namespace MiInmobiliaria.Controllers
         // GET: PagoController
         public ActionResult Index()
         {
-            var lista = repositorio.getAll();
             ViewData["Error"] = TempData["Error"];
             ViewData["Warning"] = TempData["Warning"];
             ViewData["Success"] = TempData["Success"];
+
+            var lista = repositorio.getAll();
             ViewBag.filtroContrato = false;
             return View(lista);
         }
@@ -146,14 +147,17 @@ namespace MiInmobiliaria.Controllers
         // POST: PagoController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Pago e)
         {
             try
             {
+                repositorio.Delete(id);
+                TempData["Success"] = "Pago borrado con exito.";
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                TempData["Error"] = "No se puede borrar el pago." + ex.Message;
                 return View();
             }
         }

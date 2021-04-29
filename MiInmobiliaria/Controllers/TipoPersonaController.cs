@@ -25,12 +25,17 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             ViewData[nameof(TipoPersona)] = lista;
             ViewData["Title"] = nameof(TipoPersona);
-            ViewData["Error"] = TempData["Error"];
             return View(lista);
         }
+
+
 
         // GET: TipoPersonaController/Details/5
         public ActionResult Details(int id)

@@ -15,10 +15,10 @@
 @if ((Boolean)ViewBag.filtroContrato)
 {
     <div class="row align-items-baseline">
-        <div class="col">
+        <div class="col-8">
             <i class="fas fa-filter text-danger"></i> Contrato: @contrato.Id - @contrato.Inmueble.Direccion - @contrato.Inquilino.Persona.Apellido @contrato.Inquilino.Persona.Nombre - @contrato.Garante.Persona.Apellido @contrato.Garante.Persona.Nombre
         </div>
-        <div class="col text-right">
+        <div class="col-4 text-right">
             <p class="btn btn-outline-primary"> <a asp-controller="Pago" asp-action="RegistrarPago" asp-route-id="@contrato.Id"> <i class="fa fa-plus"></i> Crear Nuevo</a> </p>
         </div>
     </div>

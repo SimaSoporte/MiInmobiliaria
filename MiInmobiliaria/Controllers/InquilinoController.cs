@@ -34,6 +34,10 @@ namespace MiInmobiliaria.Controllers
         // GET: PropietarioController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             return View(lista);
         }
@@ -69,7 +73,7 @@ namespace MiInmobiliaria.Controllers
                 e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
                 e.Persona.Password = "";
                 //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
-                e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Propietario")).Key;
+                e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Inquilino")).Key;
                 e.Persona.Avatar = "";
                 e.Persona.Id = repositorioPersona.Create(e.Persona);
                 if (e.Persona.AvatarFile != null)

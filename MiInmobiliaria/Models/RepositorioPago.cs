@@ -121,7 +121,8 @@ namespace MiInmobiliaria.Models
                                 Inmueble = new Inmueble
                                 {
                                     Id = reader.GetInt32(12),
-                                    Direccion = reader.GetString(13)
+                                    Direccion = reader.GetString(13),
+                                    Ambientes = reader.GetInt32(14)
                                 }
                             }
                         };
@@ -181,7 +182,8 @@ namespace MiInmobiliaria.Models
                                 Inmueble = new Inmueble
                                 {
                                     Id = reader.GetInt32(12),
-                                    Direccion = reader.GetString(13)
+                                    Direccion = reader.GetString(13),
+                                    Ambientes = reader.GetInt32(14)
                                 }
                             }
                         };
@@ -256,6 +258,23 @@ namespace MiInmobiliaria.Models
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 string sql = $"SELECT IsNull(MAX(numero),0) FROM Pago WHERE ContratoId = @ContratoId";
+
+                using (SqlCommand cmd = new SqlCommand(sql, con))
+                {
+                    cmd.Parameters.AddWithValue("@ContratoId", ContratoId);
+                    con.Open();
+                    res = Convert.ToInt32(cmd.ExecuteScalar());
+                    con.Close();
+                }
+            }
+            return res;
+        }
+        public int cantidadPagosHechos(int ContratoId)
+        {
+            int res = -1;
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                string sql = $"SELECT COUNT(*) FROM Pago WHERE ContratoId = @ContratoId";
 
                 using (SqlCommand cmd = new SqlCommand(sql, con))
                 {

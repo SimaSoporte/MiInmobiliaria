@@ -35,6 +35,10 @@ namespace MiInmobiliaria.Controllers
         // GET: AgenciaController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             return View(lista);
         }
@@ -53,7 +57,7 @@ namespace MiInmobiliaria.Controllers
         // GET: AgenciaController/Create
         public ActionResult Create()
         {
-            ViewBag.items = repositorioTipoPersona.getAll();
+            ViewBag.TiposPersona = repositorioTipoPersona.getAll();
             return View();
         }
 
@@ -62,27 +66,27 @@ namespace MiInmobiliaria.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Agencia e)
         {
-            Persona p = repositorioPersona.getByDniEmail(e.Persona.Dni, e.Persona.Email);
-            if (p != null)
-                e.Persona = p;
-            else
-            {
-                e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
-                e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
-                e.Persona.Password = "";
-                //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
-                e.Persona.Rol = Persona.ObtenerRoles().First(kvp => kvp.Value.Equals("Agencia")).Key;
-                e.Persona.Avatar = "";
-                e.Persona.Id = repositorioPersona.Create(e.Persona);
-                if (e.Persona.AvatarFile != null)
-                {
-                    e.Persona.Avatar = utils.uploadFile(e.Persona);
-                }
-                repositorioPersona.Edit(e.Persona);
-            }
-
             try
             {
+                Persona p = repositorioPersona.getByDniEmail(e.Persona.Dni, e.Persona.Email);
+                if (p != null)
+                    e.Persona = p;
+                else
+                {
+                    e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
+                    e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
+                    e.Persona.Password = "";
+                    e.Persona.Rol = (int)enRoles.Agencia;
+                    e.Persona.Avatar = "";
+                    e.Persona.Id = repositorioPersona.Create(e.Persona);
+                    if (e.Persona.AvatarFile != null)
+                    {
+                        e.Persona.Avatar = utils.uploadFile(e.Persona);
+                    }
+                    repositorioPersona.Edit(e.Persona);
+                }
+
+
                 e.Activo = true;
                 repositorio.Create(e);
                 return RedirectToAction(nameof(Index));
@@ -90,7 +94,7 @@ namespace MiInmobiliaria.Controllers
             catch (Exception ex)
             {
                 TempData["Error"] = "Ocurrio un error." + ex.ToString();
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 

@@ -17,7 +17,7 @@ namespace MiInmobiliaria.Controllers
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
         private readonly RepositorioInmueble repositorio;
-        private readonly IRepositorioPropietario repositorioPropietario;
+        private readonly RepositorioPropietario repositorioPropietario;
         private readonly IRepositorioAgencia repositorioAgencia;
         private readonly IRepositorioUsoInmueble repositorioUsoInmueble;
         private readonly IRepositorioTipoInmueble repositorioTipoInmueble;
@@ -40,6 +40,10 @@ namespace MiInmobiliaria.Controllers
         // GET: InmuebleController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             ViewBag.filtroDesocupado = false;
             ViewBag.filtroDisponible = false;
@@ -61,9 +65,12 @@ namespace MiInmobiliaria.Controllers
 
 
         // GET: InmuebleController/Create
-        public ActionResult Create()
+        public ActionResult Create(int Id)
         {
-            ViewBag.Propietarios = repositorioPropietario.getAll();
+            if ( Id == 0)
+                ViewBag.Propietarios = repositorioPropietario.getAll();
+            else
+                ViewBag.Propietarios = repositorioPropietario.getAll(Id);
             ViewBag.Agencias = repositorioAgencia.getAll();
             ViewBag.Usos = repositorioUsoInmueble.getAll();
             ViewBag.Tipos = repositorioTipoInmueble.getAll();
@@ -150,7 +157,7 @@ namespace MiInmobiliaria.Controllers
             }
             catch (SqlException ex)
             {
-                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el tipo Persona porque esta utilizado" : "Ocurrio un error.";
+                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el Inmueble porque esta utilizado" : "Ocurrio un error.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -212,6 +219,35 @@ namespace MiInmobiliaria.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+        }
+
+
+        public ActionResult Busqueda()
+        {
+            ViewBag.Usos = repositorioUsoInmueble.getAll();
+            ViewBag.Tipos = repositorioTipoInmueble.getAll();
+            ViewBag.filtroDesocupado = false;
+            var lista = repositorio.getAll();
+            return View(lista);
+        }
+
+
+        [HttpPost]
+        public ActionResult Busqueda(int UsoInmuebleId, int TipoInmuebleId, int ambientes, DateTime desde, DateTime hasta, decimal minimo, decimal maximo)
+        {
+            try
+            {
+                var lista = repositorio.Busqueda(UsoInmuebleId, TipoInmuebleId, ambientes, desde, hasta, minimo, maximo);
+                ViewBag.Usos = repositorioUsoInmueble.getAll();
+                ViewBag.Tipos = repositorioTipoInmueble.getAll();
+                ViewBag.filtroDesocupado = true;
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Ocurrio un error." + ex.ToString();
+                return RedirectToAction(nameof(Index));
+            }
         }
 
     }

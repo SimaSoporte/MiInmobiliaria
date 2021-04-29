@@ -42,6 +42,7 @@
                                 @:<option value="@item.Id">@(item.Nombre)</option>
                             }
                         </select>
+                        <span asp-validation-for="Persona.TipoPersona.Id" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -68,7 +69,7 @@
                 <div class="row">
                     <div class="col-3"><label asp-for="Persona.FechaNac" class="control-label"></label></div>
                     <div class="col-9">
-                        <input asp-for="Persona.FechaNac" class="form-control" />
+                        <input asp-for="Persona.FechaNac" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.ToString("yyyy-MM-dd")" />
                         <span asp-validation-for="Persona.FechaNac" class="text-danger"></span>
                     </div>
                 </div>

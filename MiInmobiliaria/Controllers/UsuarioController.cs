@@ -103,6 +103,10 @@ namespace MiInmobiliaria.Controllers
         // GET: UsuarioController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             return View(lista);
         }

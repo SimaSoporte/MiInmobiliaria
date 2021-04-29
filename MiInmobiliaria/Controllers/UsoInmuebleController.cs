@@ -25,11 +25,17 @@ namespace MiInmobiliaria.Controllers
         // GET: UsoInmuebleController
         public ActionResult Index()
         {
+            ViewData["Error"] = TempData["Error"];
+            ViewData["Warning"] = TempData["Warning"];
+            ViewData["Success"] = TempData["Success"];
+
             var lista = repositorio.getAll();
             ViewData[nameof(UsoInmueble)] = lista;
             ViewData["Title"] = nameof(UsoInmueble);
             return View(lista);
         }
+
+
 
         // GET: UsoInmuebleController/Details/5
         public ActionResult Details(int id)
@@ -108,7 +114,7 @@ namespace MiInmobiliaria.Controllers
             }
             catch (SqlException ex)
             {
-                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el tipo Persona porque esta utilizado" : "Ocurrio un error.";
+                TempData["Error"] = ex.Number == 547 ? "No se puede borrar el uso del inmueble porque esta utilizado" : "Ocurrio un error.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

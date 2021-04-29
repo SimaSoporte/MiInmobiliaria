@@ -37,12 +37,13 @@ namespace MiInmobiliaria.Controllers
         // GET: ContratoController
         public ActionResult Index()
         {
-            var lista = repositorio.getAll();
-            ViewBag.filtroVigente = false;
-            ViewBag.filtroInmueble = false;
             ViewData["Error"] = TempData["Error"];
             ViewData["Warning"] = TempData["Warning"];
             ViewData["Success"] = TempData["Success"];
+
+            var lista = repositorio.getAll();
+            ViewBag.filtroVigente = false;
+            ViewBag.filtroInmueble = false;
             return View(lista);
         }
 
@@ -79,13 +80,15 @@ namespace MiInmobiliaria.Controllers
         // POST: ContratoController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Contrato e)
+        public ActionResult Create(int Id, Contrato e)
         {
             try
             {
-                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, e.InmuebleId) != null)
+                if (repositorioInmueble.getDesocupado(e.Desde, e.Hasta, Id) == null)
                 {
-                    e.Precio = repositorioInmueble.getById(e.InmuebleId).Precio;
+                    e.Inmueble = repositorioInmueble.getById(Id);
+                    e.InmuebleId = e.Inmueble.Id;
+                    e.Precio = e.Inmueble.Precio;
                     e.Id = repositorio.Create(e);
                     TempData["Success"] = "Contrato creado con éxito.";
                     return RedirectToAction(nameof(Index));

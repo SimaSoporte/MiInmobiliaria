@@ -16,8 +16,8 @@ namespace MiInmobiliaria.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
-        private readonly RepositorioPersona repositorio;
-        private readonly RepositorioTipoPersona repositorioTipoPersona;
+        private readonly IRepositorioPersona repositorio;
+        private readonly IRepositorioTipoPersona repositorioTipoPersona;
         private readonly Utils utils;
 
         public PersonaController(IConfiguration configuration, IWebHostEnvironment environment)

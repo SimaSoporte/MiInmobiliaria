@@ -14,7 +14,7 @@ namespace MiInmobiliaria.Controllers
     public class TipoPersonaController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly RepositorioTipoPersona repositorio;
+        private readonly IRepositorioTipoPersona repositorio;
 
         public TipoPersonaController(IConfiguration configuration)
         {
@@ -40,7 +40,7 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Details/5
         public ActionResult Details(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             //ViewData[nameof(TipoPersona)] = e;
             return View(e);
         }
@@ -70,7 +70,7 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Edit/5
         public ActionResult Edit(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
 
@@ -81,7 +81,7 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                repositorio.Editar(e);
+                repositorio.Edit(e);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -96,7 +96,7 @@ namespace MiInmobiliaria.Controllers
         // GET: TipoPersonaController/Delete/5
         public ActionResult Delete(int id)
         {
-            var e = repositorio.Obtener(id);
+            var e = repositorio.getById(id);
             return View(e);
         }
         [Authorize(Policy = "Administrador")]

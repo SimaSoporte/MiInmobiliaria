@@ -18,8 +18,8 @@ namespace MiInmobiliaria.Controllers
         private readonly IWebHostEnvironment environment;
         private readonly RepositorioContrato repositorio;
         private readonly RepositorioInmueble repositorioInmueble;
-        private readonly RepositorioInquilino repositorioInquilino;
-        private readonly RepositorioGarante repositorioGarante;
+        private readonly IRepositorioInquilino repositorioInquilino;
+        private readonly IRepositorioGarante repositorioGarante;
 
         private Inmueble inmueble = new Inmueble();
 

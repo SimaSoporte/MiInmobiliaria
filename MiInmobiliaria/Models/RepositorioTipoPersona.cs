@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MiInmobiliaria.Models
 {
-    public class RepositorioTipoPersona : RepositorioBase
+    public class RepositorioTipoPersona : RepositorioBase , IRepositorioTipoPersona
     {
         public RepositorioTipoPersona(IConfiguration configuration) : base(configuration)
         {
@@ -67,7 +67,7 @@ namespace MiInmobiliaria.Models
         //    return items;
         //}
 
-        public TipoPersona Obtener(int id)
+        public TipoPersona getById(int id)
         {
             TipoPersona tipoPersona = null;
 
@@ -117,7 +117,7 @@ namespace MiInmobiliaria.Models
             return res;
         }
 
-        public int Editar(TipoPersona e)
+        public int Edit(TipoPersona e)
         {
             int res = -1;
             using(SqlConnection con = new SqlConnection(connectionString))

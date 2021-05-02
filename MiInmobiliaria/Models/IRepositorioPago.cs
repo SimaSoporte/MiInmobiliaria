@@ -7,5 +7,7 @@ namespace MiInmobiliaria.Models
 {
     public interface IRepositorioPago : IRepositorio<Pago>
     {
+        public int numeroUltimoPago(int ContratoId);
+        public IList<Pago> getAll(int ContratoId);
     }
 }

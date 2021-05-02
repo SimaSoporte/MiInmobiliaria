@@ -16,9 +16,9 @@ namespace MiInmobiliaria.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
-        private readonly RepositorioGarante repositorio;
-        private readonly RepositorioTipoPersona repositorioTipoPersona;
-        private readonly RepositorioPersona repositorioPersona;
+        private readonly IRepositorioGarante repositorio;
+        private readonly IRepositorioTipoPersona repositorioTipoPersona;
+        private readonly IRepositorioPersona repositorioPersona;
         private readonly Utils utils;
 
         public GaranteController(IConfiguration configuration, IWebHostEnvironment environment)
@@ -69,7 +69,7 @@ namespace MiInmobiliaria.Controllers
                 e.Persona = p;
             else
             {
-                e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
+                e.Persona.TipoPersona = repositorioTipoPersona.getById(e.Persona.TipoPersona.Id);
                 e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
                 e.Persona.Password = "";
                 //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value
@@ -112,7 +112,7 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                e.Persona.TipoPersona = repositorioTipoPersona.Obtener(e.Persona.TipoPersona.Id);
+                e.Persona.TipoPersona = repositorioTipoPersona.getById(e.Persona.TipoPersona.Id);
                 e.Persona.TipoPersonaId = e.Persona.TipoPersona.Id;
                 e.Persona.Password = "";
                 //Fuente: https://es.coredump.biz/questions/4538894/get-index-of-a-keyvalue-pair-in-a-c-dictionary-based-on-the-value

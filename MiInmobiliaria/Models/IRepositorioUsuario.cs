@@ -7,5 +7,6 @@ namespace MiInmobiliaria.Models
 {
     public interface IRepositorioUsuario : IRepositorio<Usuario>
     {
+        public Usuario getByEmail(string email);
     }
 }

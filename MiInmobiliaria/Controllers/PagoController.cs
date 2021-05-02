@@ -14,8 +14,8 @@ namespace MiInmobiliaria.Controllers
     public class PagoController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly RepositorioPago repositorio;
-        private readonly RepositorioContrato repositorioContrato;
+        private readonly IRepositorioPago repositorio;
+        private readonly IRepositorioContrato repositorioContrato;
 
         public PagoController(IConfiguration configuration)
         {

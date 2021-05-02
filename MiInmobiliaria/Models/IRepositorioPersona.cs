@@ -7,5 +7,6 @@ namespace MiInmobiliaria.Models
 {
     public interface IRepositorioPersona : IRepositorio<Persona>
     {
+        public Persona getByDniEmail(string dni, string email);
     }
 }

@@ -7,5 +7,6 @@ namespace MiInmobiliaria.Models
 {
     public interface IRepositorioPropietario : IRepositorio<Propietario>
     {
+        public IList<Propietario> getAll(int id);
     }
 }

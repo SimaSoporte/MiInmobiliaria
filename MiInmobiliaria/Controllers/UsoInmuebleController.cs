@@ -14,7 +14,7 @@ namespace MiInmobiliaria.Controllers
     public class UsoInmuebleController : Controller
     {
         private readonly IConfiguration configuration;
-        private readonly RepositorioUsoInmueble repositorio;
+        private readonly IRepositorioUsoInmueble repositorio;
 
         public UsoInmuebleController(IConfiguration configuration)
         {

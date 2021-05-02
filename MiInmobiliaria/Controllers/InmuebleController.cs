@@ -16,8 +16,8 @@ namespace MiInmobiliaria.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IWebHostEnvironment environment;
-        private readonly RepositorioInmueble repositorio;
-        private readonly RepositorioPropietario repositorioPropietario;
+        private readonly IRepositorioInmueble repositorio;
+        private readonly IRepositorioPropietario repositorioPropietario;
         private readonly IRepositorioAgencia repositorioAgencia;
         private readonly IRepositorioUsoInmueble repositorioUsoInmueble;
         private readonly IRepositorioTipoInmueble repositorioTipoInmueble;
@@ -67,10 +67,11 @@ namespace MiInmobiliaria.Controllers
         // GET: InmuebleController/Create
         public ActionResult Create(int Id)
         {
-            if ( Id == 0)
+            if (Id == 0)
                 ViewBag.Propietarios = repositorioPropietario.getAll();
-            else
+            else { 
                 ViewBag.Propietarios = repositorioPropietario.getAll(Id);
+            }
             ViewBag.Agencias = repositorioAgencia.getAll();
             ViewBag.Usos = repositorioUsoInmueble.getAll();
             ViewBag.Tipos = repositorioTipoInmueble.getAll();
@@ -120,7 +121,10 @@ namespace MiInmobiliaria.Controllers
         {
             try
             {
-                e.Avatar = "";
+                if (e.Avatar == null) {
+                    e.Avatar = "";
+                }
+
                 if (e.AvatarFile != null)
                 {
                     e.Avatar = utils.uploadFile(e);
